@@ -43,8 +43,6 @@ class Preceptron:
     def load_input(self, inputs):
         self.inputs = inputs
 
-    def load_saved_weights(self, saved_weights_json):
-
 
 
 
