@@ -18,3 +18,6 @@ class NeuralLayer:
     def preceptron_at_index(self, preceptron_index):
         return self.neural_layer[preceptron_index]
 
+    def num_preceptrons(self):
+        return self.num_preceptrons()
+
