@@ -19,18 +19,31 @@ class Preceptron:
             self.weights.append(math.random())
 
     def activate(self):
+        sum = 0
+        for input_index in range(len(self.inputs)):
+            sum += self.inputs[input_index] * self.weights[input_index] + self.bias
+        return self.activation_funct.activate(sum)
 
-    def input_at_index(self):
+    def input_at_index(self, input_index):
+        return self.inputs[input_index]
 
-    def weight_at_index(self):
+    def weight_at_index(self, input_index):
+        return self.weights[input_index]
 
-    def optimize_weights(self):
+    def optimize_weights(self, del_weights):
+        for weight_index in range(len(self.weights)):
+            self.weights[weight_index] = self.weights[weight_index] - (self.learning_rate * del_weights[weight_index])
 
-    def optimize_bias(self):
+    def number_of_inputs(self):
+        return self.num_inputs
 
-    def load_input(self):
+    def optimize_bias(self, del_bias):
+        self.bias = self.bias - (self.learning_rate * del_bias)
 
-    def load_saved_weights(self):
+    def load_input(self, inputs):
+        self.inputs = inputs
+
+    def load_saved_weights(self, saved_weights_json):
 
 
 
