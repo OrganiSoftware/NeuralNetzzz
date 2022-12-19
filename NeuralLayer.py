@@ -21,3 +21,10 @@ class NeuralLayer:
     def num_preceptrons(self):
         return self.num_preceptrons()
 
+    def load_inputs(self):
+
+    def load_weights(self):
+
+    def adjust_weights(self):
+
+    def adjust_biases(self):
