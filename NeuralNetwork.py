@@ -50,15 +50,9 @@ class NeuralNetwork:
 
     #def load_weights(self, neural_memory_json):
 
-    def adjust_weights(self, del_weight_tensor_network):
+    def adjust_weights_biases(self, del_weight_bias_network):
         if self.constructed:
             for layer_index in range(len(self.neural_net)):
-                self.neural_net[layer_index].adjust_weights(del_weight_tensor_network[layer_index])
-
-    def adjust_biases(self, del_bias_tensor_network):
-        if self.constructed:
-            for layer_index in range(len(self.neural_net)):
-                self.neural_net[layer_index].adjust_weights(del_bias_tensor_network[layer_index])
-
+                self.neural_net[layer_index].adjust_weights_biases(del_weight_bias_network[layer_index])
 
 
