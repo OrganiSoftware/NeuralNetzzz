@@ -1,3 +1,6 @@
+"""
+@author Antonio Bruce Webb(Jackal)
+"""
 import math
 
 class Preceptron:

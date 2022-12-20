@@ -1,3 +1,6 @@
+"""
+@author Antonio Bruce Webb(Jackal)
+"""
 from Preceptron import Preceptron
 
 
@@ -27,4 +30,3 @@ class NeuralLayer:
 
     def adjust_weights(self):
 
-    def adjust_biases(self):
