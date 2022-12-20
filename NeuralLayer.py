@@ -24,9 +24,16 @@ class NeuralLayer:
     def num_preceptrons(self):
         return self.num_preceptrons()
 
-    def load_inputs(self):
+    def load_inputs(self, inputs):
+        for preceptron_index in range(self.num_preceptrons):
+            self.neural_layer[preceptron_index].load_inputs(inputs)
 
-    def load_weights(self):
+    #def load_weights(self):
 
-    def adjust_weights(self):
+    def adjust_weights(self, del_weight_tensor_layer):
+        for preceptron_index in range(self.num_preceptrons):
+            self.neural_layer[preceptron_index].adjust_weights(del_weight_tensor_layer[preceptron_index])
 
+    def adjust_biases(self, del_bias_tensor_layer):
+        for preceptron_index in range(self.num_preceptrons):
+            self.neural_layer[preceptron_index].adjust_weights(del_bias_tensor_layer[preceptron_index])

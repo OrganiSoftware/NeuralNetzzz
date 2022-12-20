@@ -43,10 +43,10 @@ class Preceptron:
     def adjust_bias(self, del_bias):
         self.bias = self.bias - (self.learning_rate * del_bias)
 
-    def load_input(self, inputs):
+    def load_inputs(self, inputs):
         self.inputs = inputs
 
-    def load_weights(self):
+    #def load_weights(self):
 
 
 
