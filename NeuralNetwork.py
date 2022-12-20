@@ -16,7 +16,6 @@ class NeuralNetwork:
     def add_hidden_layers(self, num_layers, size_of_layers):
         if not self.constructed:
             for layer_index in range(num_layers):
-                num_inputs = 0
                 if self.neural_net is None:
                     num_inputs = self.size_of_input_layer
                 else:
