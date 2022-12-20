@@ -1,6 +1,6 @@
 # NeuralNetzzz
 NeuralNetzzz
-Quick and easy neural network construction and training!!!!
+Quick and easy neural network construction and training and rapid development of deep learning and machine learning algotrythm just construct train and test the AI and have fun and play away.
 
 This code is 100%  written by Antonio Bruce Webb(Jackal)
 it will be open sourced when in working order.
