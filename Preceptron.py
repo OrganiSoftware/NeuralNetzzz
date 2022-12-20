@@ -3,6 +3,7 @@
 """
 import math
 
+
 class Preceptron:
     def __int__(self, activation_funct, num_inputs, learning_rate):
         self.activation_funct = activation_funct
