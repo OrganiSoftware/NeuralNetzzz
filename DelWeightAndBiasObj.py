@@ -8,13 +8,12 @@ class DelWeightAndBiasObj:
     def __init__(self, preceptron):
         self.del_weights = []
         self.del_bias = 0
-        self.preceptron = preceptron
         self.num_weight_calcs = 0
         self.averaged = False
         for wight_index in range(preceptron.number_of_inputs()):
             self.del_weights.append(0)
 
-    def add_del_weight_bais_calc(self, del_weights, del_bias):
+    def add_del_weight_bias_calc(self, del_weights, del_bias):
         if not self.averaged:
             for weight_index in range(len(self.del_weights)):
                 self.del_weights[weight_index] += del_weights[weight_index]
@@ -37,4 +36,3 @@ class DelWeightAndBiasObj:
         if self.averaged:
             return self.del_bias
         return None
-    
