@@ -47,6 +47,9 @@ class NeuralNetwork:
     def layer_at_index(self, layer_index):
         return self.neural_net[layer_index]
 
+    def num_neural_layers(self):
+        return len(self.neural_net)
+
     #def load_weights(self, neural_memory_json):
 
     def adjust_weights_biases(self, del_weight_bias_network):
