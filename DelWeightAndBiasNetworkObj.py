@@ -12,4 +12,4 @@ class DelWeightAndBiasNetworkObj:
             del_weight_and_bias_layer_obj = DelWeightAndBiasLayerObj(neural_net.layer_at_index())
             self.del_weight_and_bias_network.append(del_weight_and_bias_layer_obj)
 
-        
+    def average_del_weight_biases(self):
