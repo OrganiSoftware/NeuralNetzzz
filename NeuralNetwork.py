@@ -1,5 +1,5 @@
 """
-@author Antonio Bruce Webb(Jackal)
+@author Antonio Bruce Webb(Organi)
 """
 from NeuralLayer import NeuralLayer
 
