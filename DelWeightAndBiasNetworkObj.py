@@ -13,4 +13,8 @@ class DelWeightAndBiasNetworkObj:
             self.del_weight_and_bias_network.append(del_weight_and_bias_layer_obj)
 
     def average_del_weight_biases(self):
+        for layer_index in range(len(self.del_weight_and_bias_network)):
+            self.del_weight_and_bias_network[layer_index].average_del_weight_bias()
+
+    def add_del_weight_and_bias_calc(self, layer_index, preceptron_index, del_weights, del_bias):
 
