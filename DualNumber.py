@@ -1,6 +1,7 @@
 """
 @author Antonio Bruce Webb(Organi)
 """
+import math
 
 
 class DualNumber:
@@ -17,7 +18,7 @@ class DualNumber:
 
     def devide(self, dual_num):
         new_real = self.real / dual_num.real()
-        new_dual = ((dual_num.real() * self.dual)  - (self.real * dual_num.dual()))/dual_num.real()**2
+        new_dual = ((dual_num.real() * self.dual) - (self.real * dual_num.dual()))/dual_num.real()**2
         self.real = new_real
         self.dual = new_dual
 
@@ -39,7 +40,9 @@ class DualNumber:
             self.real = 1
             self.dual = 0
 
-    def root(self, m, n):
-        self.pow(m)
-        self.real = self.real ** (1/n)
-        self.dual = self.dual ** (1/n)
+    def nth_root(self, n):
+        new_real = math.pow(self.real, 1/n)
+        new_dual = (new_real * self.dual) / (2 * self.real)
+        self.real = new_real
+        self.dual = new_dual
+
