@@ -1,9 +1,9 @@
 """
 @author Antonio Bruce Webb(Organi)
-"""
-
 from FunctionParser import FunctionParser
-
+"""
+from math import e
+from math import pow
 
 class HyperbolicTangentActivationFunction:
 
@@ -11,5 +11,6 @@ class HyperbolicTangentActivationFunction:
         self.function = "((e^x-e^-x)/(e^x+e^-x))"
 
     def calcualate(self, x):
-        return self.function_parser.calculate(x)
+        return ((pow(e,x) - (pow(e, -x)))/(pow(e,x)+(pow(e,-x))))
+
 

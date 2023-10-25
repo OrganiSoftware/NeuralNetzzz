@@ -1,7 +1,7 @@
 """
 @author Antonio Bruce Webb(Organi)
 """
-import math
+from math import random
 
 
 class Preceptron:
@@ -12,10 +12,10 @@ class Preceptron:
         self.learning_rate = learning_rate
         self.inputs = []
         self.weights = []
-        self.bias = math.random()
+        self.bias = random()
         for input_index in range(self.num_inputs):
-            self.inputs.append(math.random())
-            self.weights.append(math.random())
+            self.inputs.append(random())
+            self.weights.append(random())
 
     def activate(self):
         weighted_sum = 0

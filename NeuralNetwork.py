@@ -24,8 +24,9 @@ class NeuralNetwork:
                 self.neural_net.append(layer)
 
     def constructed(self):
-        self.add_hidden_layers(1, self.size_of_output_layer)
-        self.constructed = True
+        if not self.constructed:
+            self.add_hidden_layers(1, self.size_of_output_layer)
+            self.constructed = True
 
     def predict_output(self, inputs):
         if self.constructed:
