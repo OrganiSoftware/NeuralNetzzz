@@ -2,7 +2,6 @@
 @author Antonio Bruce Webb(Organi)
 """
 from math import pow
-from math import abs
 class DualNumber:
 
     def __init__(self, real, dual):
@@ -26,8 +25,6 @@ class DualNumber:
 
     def __floordiv__(self, dual_num):
         return self.divide(dual_num)
-
-
 
     def real(self):
         return self.real

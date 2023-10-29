@@ -1,7 +1,7 @@
 """
 @author Antonio Bruce Webb(Organi)
 """
-from math import random
+from random import random
 
 
 class Preceptron:
