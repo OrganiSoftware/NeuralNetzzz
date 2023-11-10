@@ -61,7 +61,7 @@ class DualNumber:
         new_dual = 0
         if power > 0:
             new_real = pow(self.real, power)
-            new_dual = 2 * pow(self.real, power - 1) * self.dual
+            new_dual = power * pow(self.real, power - 1) * self.dual
         elif power < 0:
             new_real = (pow(self.real, power) / pow(self.real, 2 * abs(power)))
             new_dual = -((2 * self.real * self.dual) / pow(self.real, 2 * abs(power)))
