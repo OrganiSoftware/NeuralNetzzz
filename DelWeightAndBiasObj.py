@@ -5,12 +5,12 @@
 
 class DelWeightAndBiasObj:
 
-    def __init__(self, preceptron):
+    def __init__(self, perceptron):
         self.del_weights = []
         self.del_bias = 0
         self.num_weight_calcs = 0
         self.averaged = False
-        for wight_index in range(preceptron.number_of_inputs()):
+        for wight_index in range(perceptron.number_of_inputs()):
             self.del_weights.append(0)
 
     def add_del_weight_bias_calc(self, del_weights, del_bias):
