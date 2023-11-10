@@ -12,7 +12,7 @@ class HyperbolicTangentActivationFunction:
 
     @staticmethod
     def calculate(self, x):
-        return (pow(e, x) - (pow(e, -x)))/(pow(e, x)+(pow(e, -x)))
+        return (pow(e, x) - (pow(e, -x))) / (pow(e, x) + (pow(e, -x)))
 
     def function_string(self):
         return self.function
