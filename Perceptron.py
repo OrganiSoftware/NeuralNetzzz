@@ -4,7 +4,7 @@
 from random import random
 
 
-class Preceptron:
+class Perceptron:
 
     def __int__(self, activation_funct, num_inputs, learning_rate):
         self.activation_funct = activation_funct
