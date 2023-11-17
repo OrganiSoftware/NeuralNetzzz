@@ -21,7 +21,7 @@ class Perceptron:
         weighted_sum = 0
         for input_index in range(len(self.inputs)):
             weighted_sum += self.inputs[input_index] * self.weights[input_index] + self.bias
-        return self.activation_funct.activate(weighted_sum)
+        return self.activation_funct.calculate(weighted_sum)
 
     def input_at_index(self, input_index):
         return self.inputs[input_index]
