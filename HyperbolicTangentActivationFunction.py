@@ -9,7 +9,6 @@ class HyperbolicTangentActivationFunction:
 
     def __init__(self):
         self.function = "((e^x-e^-x)/(e^x+e^-x))"
-
     @staticmethod
     def calculate(self, x):
         return (pow(e, x) - (pow(e, -x))) / (pow(e, x) + (pow(e, -x)))
