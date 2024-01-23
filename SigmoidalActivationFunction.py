@@ -14,6 +14,7 @@ class SigmoidalActivationFuction:
     def calculate(x):
         return 1/(1+pow(e, -x))
 
-    def function_string(self):
-        return self.function
+    def function_string(self, x):
+        return "(1/(1+e^ - "+str(x)+"))"
+
 

@@ -17,8 +17,8 @@ class MSECostFunction:
                 network_activations.append(layer_activations)
                 predicted_outputs = network_activations[len(network_activations) - 1]
             for perceptron in range(len(predicted_outputs)):
-                cost_of_state += (self.training_set[perceptron] - predicted_outputs[perceptron])**2
-            cost_of_state = cost_of_state * (1/(2*len(predicted_outputs)))
+                cost_of_state += (predicted_outputs[perceptron] - self.training_set[perceptron])**2
+            cost_of_state = cost_of_state * (1 / len(predicted_outputs))
             sum_cost += cost_of_state
 
 
