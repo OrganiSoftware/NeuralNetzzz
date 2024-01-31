@@ -1,6 +1,5 @@
 """
 @author Antonio Bruce Webb(Organi)
-from FunctionParser import FunctionParser
 """
 from math import e
 from math import pow

@@ -2,7 +2,7 @@
 @author Antonio Bruce Webb(Organi)
 """
 from random import random
-
+from DualNumber import DualNumber
 
 class Perceptron:
 
@@ -44,5 +44,27 @@ class Perceptron:
 
     #def load_weights(self):
 
+    def comp_partial(self, weight_index, derivating_bias):
+        weighted_sum = 0
+        dual_weighted_sum = None
+        for input_index in range(len(self.inputs)):
+            if weight_index == input_index and not derivating_bias:
+                weight_dual_num = DualNumber(self.weights[input_index], 1)
+                input_dual_num = DualNumber(self.inputs, 0)
+                bias_dual_num = DualNumber(self.bias,0)
+            elif derivating_bias:
+                weight_dual_num = DualNumber(self.weights[input_index], 0)
+                input_dual_num = DualNumber(self.inputs, 0)
+                bias_dual_num = DualNumber(self.bias, 1)
+            else:
+                weight_dual_num = DualNumber(self.weights[input_index], 0)
+                input_dual_num = DualNumber(self.inputs, 0)
+                bias_dual_num = DualNumber(self.bias, 0)
+            if dual_weighted_sum is None:
+                dual_weighted_sum = (input_dual_num * weight_dual_num) + bias_dual_num
+            else:
+                dual_weighted_sum = dual_weighted_sum + ((input_dual_num * weight_dual_num) + bias_dual_num)
+            weighted_sum += self.inputs[input_index] * self.weights[input_index] + self.bias
+        return self.activation_funct.comp_partial(dual_weighted_sum)
 
 

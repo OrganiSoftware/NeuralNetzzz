@@ -24,15 +24,17 @@ class LeakyRELUActivationFunction:
                 resultant = x / self.maximum_activation
         return resultant
 
-    def function_string(self, x):
+    def function_string(self, x, funct_string):
         if x <= 0:
             if x * self.alpha <= -self.maximum_activation:
-                function_string = "-1"
+                function_string = ("((" + funct_string + "+" + str(self.maximum_activation) + ")" + " - " + funct_string
+                                   + ")")
             else:
-                function_string = "(" + str(x) + str(self.alpha) + ")/(" + str(self.maximum_activation) + ")"
+                function_string = "(" + funct_string + str(self.alpha) + ")/(" + str(self.maximum_activation) + ")"
         else:
             if x >= self.maximum_activation:
-                function_string = "1"
+                function_string = ("((" + funct_string + "-" + str(self.maximum_activation) + ")" + " - " + funct_string
+                                   + ")")
             else:
-                function_string = "(" + str(x) + ")/(" + str(self.maximum_activation) + ")"
+                function_string = "(" + funct_string + ")/(" + str(self.maximum_activation) + ")"
         return function_string
