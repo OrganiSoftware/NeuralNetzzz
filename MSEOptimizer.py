@@ -1,5 +1,5 @@
-
-class MSECostFunction:
+from DualNumber import DualNumber
+class MSEOptimizer:
 
     def _init__(self, neural_net, training_set):
         self.neural_net = neural_net
@@ -21,6 +21,14 @@ class MSECostFunction:
             cost_of_state = cost_of_state * (1 / len(predicted_outputs))
             sum_cost += cost_of_state
 
+    def train(self, number_of_iterations, batch_sizes):
+        for interation
+            for out_put_index in range(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1])):
+                for layer_index in range(len(self.neural_net.neural_net) - 1):
+                    index = (len(self.neural_net.neural_net) - 2) - layer_index
+                    for perceptron_index in range(len(self.neural_net.neural_net[index].neural_layer)):
+                        del_weights = 0
+                        del_bais = self.neural_net.neural_net[index].neural_layer[perceptron_index].comp_partial(0, True)
 
 
 

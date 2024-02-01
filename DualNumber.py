@@ -2,6 +2,7 @@
 @author Antonio Bruce Webb(Organi)
 """
 from math import pow
+from numpy import log
 class DualNumber:
 
     def __init__(self, real, dual):
@@ -53,6 +54,12 @@ class DualNumber:
     def multiply(self, dual_num):
         new_real = self.real * dual_num.real()
         new_dual = (self.real * dual_num.dual()) + (dual_num.real() * self.dual)
+        new_dual_num = DualNumber(new_real, new_dual)
+        return new_dual_num
+
+    def dual_pow_dual(self,dual_num):
+        new_real = pow(self.real,dual_num.real())
+        new_dual = (new_real * dual_num.dual() * log(self.real)) + ((new_real * self.dual * dual_num.real()) / self.real)
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
