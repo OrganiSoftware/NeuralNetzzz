@@ -1,14 +1,15 @@
 from DualNumber import DualNumber
 class MSEOptimizer:
 
-    def _init__(self, neural_net, training_set):
+    def _init__(self, neural_net, training_set, del_weight_net_obj):
         self.neural_net = neural_net
         self.training_set = training_set
+        self.del_weight_net_obj = del_weight_net_obj
 
     def calc_total_cost_of_all_states(self):
         sum_cost = 0
-        for training_state in self.training_set:
-            self.neural_net.load_inputs(training_state.inputs)
+        for training_state in range(len(self.training_set)):
+            self.neural_net.load_inputs(self.training_set.inputs[training_state])
             network_activations = []
             predicted_outputs = []
             cost_of_state = 0
@@ -22,13 +23,16 @@ class MSEOptimizer:
             sum_cost += cost_of_state
 
     def train(self, number_of_iterations, batch_sizes):
-        for interation
-            for out_put_index in range(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1])):
-                for layer_index in range(len(self.neural_net.neural_net) - 1):
-                    index = (len(self.neural_net.neural_net) - 2) - layer_index
-                    for perceptron_index in range(len(self.neural_net.neural_net[index].neural_layer)):
-                        del_weights = 0
-                        del_bais = self.neural_net.neural_net[index].neural_layer[perceptron_index].comp_partial(0, True)
+        for interation in range(number_of_iterations):
+            for training_state in range(len(self.training_set)):
+                self.neural_net.load_inputs(self.training_set.inputs[training_state])
+                for output_index in range(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1])):
+                    for layer_index in range(len(self.neural_net.neural_net) - 1):
+                        index = (len(self.neural_net.neural_net) - 2) - layer_index
+                        for perceptron_index in range(len(self.neural_net.neural_net[index].neural_layer)):
+                            del_weights = 0
+                            del_bais = self.neural_net.neural_net[index].neural_layer[perceptron_index].comp_partial(0, True)
 
 
-
+    def comp_partial_list(self, perceptron):
+        one = DualNumber(1, 0)

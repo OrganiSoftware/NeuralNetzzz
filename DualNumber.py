@@ -58,7 +58,7 @@ class DualNumber:
         return new_dual_num
 
     def dual_pow_dual(self,dual_num):
-        new_real = pow(self.real,dual_num.real())
+        new_real = pow(self.real, dual_num.real())
         new_dual = (new_real * dual_num.dual() * log(self.real)) + ((new_real * self.dual * dual_num.real()) / self.real)
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
