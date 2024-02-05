@@ -34,7 +34,6 @@ class MSEOptimizer:
                 count += 1
 
     def comp_network_delta_organi_tensor(self, training_state_inputs, training_state_expected_outputs):
-        one = DualNumber(1, 0)
         self.neural_net.load_inputs(training_state_inputs)
         m = DualNumber(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1]), 0)
         for neural_layer in range(len(self.neural_net.neural_net)):
@@ -49,7 +48,7 @@ class MSEOptimizer:
                     weight_dual_partial = self.neural_net.neural_net[index].neural_layer[perceptron].comp_partial(weight_index, False)
                     del_weight_dual = (weight_dual_partial - one)(weight_dual_partial - one)
                     del_weight_dual = del_weight_dual / m
-                    new_weight =  self.neural_net.neural_net[index].neural_layer[perceptron].weights[weight_index] - del_weight_dual.dual()
+                    new_weight = self.neural_net.neural_net[index].neural_layer[perceptron].weights[weight_index] - del_weight_dual.dual()
                     new_weights.append(new_weight)
                 self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(index, perceptron, new_weights, new_bias)
 
