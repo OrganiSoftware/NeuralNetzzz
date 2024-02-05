@@ -56,8 +56,8 @@ class MSEOptimizer:
                                                                             new_bias)
             self.propagate_through_hidden_layers(dual_expected, m)
 
-    def propagate_through_hidden_layers(self,dual_expected, m):
-        for neural_layer in range(len(self.neural_net.neural_net ) - 1):
+    def propagate_through_hidden_layers(self, dual_expected, m):
+        for neural_layer in range(len(self.neural_net.neural_net) - 1):
             index = len(self.neural_net.neural_net) - (neural_layer + 2)
             for perceptron in range(len(self.neural_net.neural_net[index])):
                 new_weights = []
