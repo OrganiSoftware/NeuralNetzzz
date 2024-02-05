@@ -8,9 +8,14 @@ class DataSet:
     def __init__(self, max_value, min_value):
         self.inputs = [[]]
         self.expected_outputs = []
+        self.max_value = max_value
+        self.min_value = min_value
 
     def add_state(self, inputs, expected_output):
-        self.inputs.append(inputs)
+        normalized_input_state = []
+        for input_state in range(len(inputs)):
+            normalized_input_state.append(inputs[input_state]/(self.max_value - self.min_value))
+        self.inputs.append(normalized_input_state)
         self.expected_outputs.append(expected_output)
 
     def delete_state(self, input_index):
@@ -23,8 +28,7 @@ class DataSet:
 
     def replace_state(self, input_index, new_inputs, new_expected):
         self.delete_state(input_index)
-        self.inputs.append(new_inputs)
-        self.expected_outputs.append(new_expected)
+        self.add_state(new_inputs, new_expected)
 
     def clear(self,):
         self.inputs = [[]]

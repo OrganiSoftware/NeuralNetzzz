@@ -5,7 +5,7 @@
 from FunctionParser import FunctionParser
 from DualNumber import DualNumber
 
-class LeakyRELUActivationFunction:
+class LeakySquashedRELUActivationFunction:
 
     def __init__(self, alpha, maximum_activation):
         self.alpha = alpha
