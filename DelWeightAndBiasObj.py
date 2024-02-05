@@ -32,6 +32,10 @@ class DelWeightAndBiasObj:
             return self.del_weights
         return None
 
+    def clear(self):
+        self.del_bias = 0
+        for weight_index in range(len(self.del_weights)):
+            self.del_weights[weight_index] = 0
     def del_bias(self):
         if self.averaged:
             return self.del_bias

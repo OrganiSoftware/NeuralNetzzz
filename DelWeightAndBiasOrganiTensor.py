@@ -4,7 +4,7 @@
 from DelWeightAndBiasLayerObj import DelWeightAndBiasLayerObj
 
 
-class DelWeightAndBiasNetworkObj:
+class DelWeightAndBiasOrganiTensor:
 
     def __init__(self, neural_net):
         self.del_weight_and_bias_network = []
@@ -34,4 +34,7 @@ class DelWeightAndBiasNetworkObj:
             del_biases.append(self.del_weight_and_bias_network[layer_index].del_biases())
         return del_biases
 
-    
+    def clear(self):
+        for layer_index in range(len(self.del_weight_and_bias_network)):
+            self.del_weight_and_bias_network[layer_index].clear()
+
