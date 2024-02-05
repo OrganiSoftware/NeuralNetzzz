@@ -35,21 +35,21 @@ class MSEOptimizer:
 
     def comp_network_delta_organi_tensor(self, training_state_inputs, training_state_expected_outputs):
         one = DualNumber(1, 0)
-        bias_delta_dual = DualNumber(0, 0)
-        network_activations = []
+        self.neural_net.load_inputs(training_state_inputs)
+        m = DualNumber(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1]), 0)
         for neural_layer in range(len(self.neural_net.neural_net)):
-            layer_activations = self.neural_net.neural_net[neural_layer].activations()
-            network_activations.append(layer_activations)
-        for neural_layer in range(len(network_activations)):
-            index = len(network_activations) - (neural_layer + 1)
-            m = DualNumber(len(network_activations[index]), 0)
-            if neural_layer == 0:
-                for perceptron in range(len(self.neural_net.neural_net[index])):
-                    bias_dual_partial = self.neural_net.neural_net[index].neural_layer[perceptron].comp_partial(None,True)
-                    del_bias_dual += (bias_dual_partial - one)(bias_dual_partial - one)
-                    del_bias_dual = del_bias_dual / m
-                    for weight_index in range(len(self.neural_net.neural_net[index].neural_layer[perceptron].weights)):
-
-                        self.neural_net.neural_net[index].neural_layer[perceptron].comp_partial(weight_index, False)
-
+            index = len(self.neural_net.neural_net) - (neural_layer + 1)
+            for perceptron in range(len(self.neural_net.neural_net[index])):
+                new_weights = []
+                bias_dual_partial = self.neural_net.neural_net[index].neural_layer[perceptron].comp_partial(None,True)
+                del_bias_dual = (bias_dual_partial - one)(bias_dual_partial - one)
+                del_bias_dual = del_bias_dual / m
+                new_bias = self.neural_net.neural_net[index].neural_layer[perceptron].bias - del_bias_dual.dual()
+                for weight_index in range(len(self.neural_net.neural_net[index].neural_layer[perceptron].weights)):
+                    weight_dual_partial = self.neural_net.neural_net[index].neural_layer[perceptron].comp_partial(weight_index, False)
+                    del_weight_dual = (weight_dual_partial - one)(weight_dual_partial - one)
+                    del_weight_dual = del_weight_dual / m
+                    new_weight =  self.neural_net.neural_net[index].neural_layer[perceptron].weights[weight_index] - del_weight_dual.dual()
+                    new_weights.append(new_weight)
+                self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(index, perceptron, new_weights, new_bias)
 
