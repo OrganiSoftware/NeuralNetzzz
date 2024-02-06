@@ -5,9 +5,10 @@ from NeuralLayer import NeuralLayer
 
 
 class NeuralNetwork:
-    def __init__(self, size_of_output_layer, size_of_input_layer, activation_function, learning_rate):
+    def __init__(self, size_of_output_layer, size_of_input_layer, activation_function, learning_rate, output_translation_table):
         self.neural_net = []
         self.size_of_output_layer = size_of_output_layer
+        self.output_translation_table = output_translation_table
         self.size_of_input_layer = size_of_input_layer
         self.activation_function = activation_function
         self.learning_rate = learning_rate
@@ -43,7 +44,8 @@ class NeuralNetwork:
             if predicted_output_value < output_layer_activations[output_index]:
                 predicted_output_value = output_layer_activations[output_index]
                 predicted_output_index = output_index
-        return predicted_output_index
+        predicted_output = self.output_translation_table[predicted_output_index]
+        return predicted_output
 
     def layer_at_index(self, layer_index):
         return self.neural_net[layer_index]
