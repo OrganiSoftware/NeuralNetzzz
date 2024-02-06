@@ -49,8 +49,7 @@ class MSEOptimizer:
                 weight_dual_partial = self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_perceptron].comp_partial(weight_index, False)
                 del_weight_dual = (weight_dual_partial - dual_expected)(weight_dual_partial - dual_expected)
                 del_weight_dual = del_weight_dual / m
-                new_weight = self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_perceptron].weights[
-                                 weight_index] - del_weight_dual.dual()
+                new_weight = del_weight_dual
                 new_weights.append(new_weight)
             self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(len(self.neural_net.neural_net) - 1, output_perceptron, new_weights,
                                                                             new_bias)
@@ -70,9 +69,7 @@ class MSEOptimizer:
                         weight_index, False)
                     del_weight_dual = (weight_dual_partial - dual_expected)(weight_dual_partial - dual_expected)
                     del_weight_dual = del_weight_dual / m
-                    new_weight = self.neural_net.neural_net[index].neural_layer[perceptron].weights[
-                                     weight_index] - del_weight_dual.dual()
-                    new_weights.append(new_weight)
+                    new_weights.append(del_weight_dual)
                 self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(index, perceptron, new_weights,
                                                                                 new_bias)
 
