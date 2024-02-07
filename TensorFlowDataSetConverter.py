@@ -3,11 +3,45 @@
 """
 import tensorflow as tf
 from DataSet import DataSet
+from NeuralNetwork import NeuralNetwork
+from MSEOptimizer import MSEOptimizer
+from SigmoidalActivationFunction import SigmoidalActivationFuction
 def main():
-    tf_dataset = tf.keras.datasets.mnist.load_data(path='mnist.npz')
+    mnist = tf.keras.datasets.mnist
+    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+    train_data_set = convert(x_train, y_train)
+    test_data_set = convert(x_test, y_test)
+    sigmoid = SigmoidalActivationFuction()
+    output_translation_table = []
+    for index in range(10):
+        output_translation_table.append(index)
+    neural_net = NeuralNetwork(output_translation_table, len(train_data_set.inputs[0]), sigmoid, 0.1)
+    neural_net.add_hidden_layers(20,10)
+    neural_net.add_hidden_layers(10,5)
+    neural_net.add_hidden_layers(20,10)
+    neural_net.constructed()
+    mse_optimizer = MSEOptimizer(neural_net, train_data_set)
+    neural_net = mse_optimizer.train(1000, 100)
+    count = 0
+    for inputs in range(len(test_data_set.inputs)):
+        predicted_output = neural_net.predict_output(test_data_set.inputs[inputs])
+        print(str(predicted_output))
+        print(str(train_data_set.expected_outputs[inputs]))
+        if predicted_output == train_data_set.expected_outputs[inputs]:
+            count += 1
+        print(str((count/(inputs + 1))*100))
 
-def convert(tf_dataset):
-    
+
+def convert(x_train, y_train):
+    data_set = DataSet(255, 0)
+    for image in range(len(x_train)):
+        expected_output = y_train[image]
+        inputs = []
+        for row in range(len(x_train[image])):
+            for column in range(len(x_train[image][row])):
+                inputs.append(x_train[image][row][column])
+        data_set.add_state(inputs, expected_output, None)
+    return data_set
 
 if __name__ == "__main__":
     main()

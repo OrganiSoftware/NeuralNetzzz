@@ -29,6 +29,7 @@ class DataSet:
                 temp_inputs.append(self.inputs[input])
                 temp_expected_outputs.append(self.expected_outputs[input])
                 temp_rejected_outputs.append(self.rejected_outputs[input])
+
     def replace_state(self, input_index, new_inputs, new_expected, new_rejected):
         self.delete_state(input_index)
         self.add_state(new_inputs, new_expected, new_rejected)

@@ -37,5 +37,5 @@ class LeakySquashedRELUActivationFunction:
             if x >= self.maximum_activation:
                 dual_partial = dual_num - (dual_num - self.max_activation_dual)
             else:
-                dual_partial = dual_num /self.max_activation_dual
+                dual_partial = dual_num / self.max_activation_dual
         return dual_partial

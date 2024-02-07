@@ -20,7 +20,7 @@ class NeuralNetwork:
                 if self.neural_net is None:
                     num_inputs = self.size_of_input_layer
                 else:
-                    num_inputs = len(self.neural_net[len(self.neural_net) - 1])
+                    num_inputs = len(self.neural_net[len(self.neural_net) - 1].neural_layer)
                 layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate)
                 self.neural_net.append(layer)
 
@@ -31,12 +31,7 @@ class NeuralNetwork:
 
     def predict_output(self, inputs):
         if self.constructed:
-            for layer_index in range(len(self.neural_net)):
-                if layer_index == 0:
-                    self.neural_net[layer_index].load_inputs(inputs)
-                else:
-                    activations = self.neural_net[layer_index - 1].activations()
-                    self.neural_net[layer_index].load_inputs(activations)
+           self.load_inputs(inputs)
         output_layer_activations = self.neural_net[len(self.neural_net) - 1].activations()
         predicted_output_value = 0
         predicted_output_index = 0
@@ -46,6 +41,15 @@ class NeuralNetwork:
                 predicted_output_index = output_index
         predicted_output = self.output_translation_table[predicted_output_index]
         return predicted_output
+
+    def load_inputs(self, inputs):
+        for layer_index in range(len(self.neural_net)):
+            if layer_index == 0:
+                self.neural_net[layer_index].load_inputs(inputs)
+            else:
+                activations = self.neural_net[layer_index - 1].activations()
+                self.neural_net[layer_index].load_inputs(activations)
+
 
     def layer_at_index(self, layer_index):
         return self.neural_net[layer_index]
@@ -69,10 +73,12 @@ class NeuralNetwork:
 
     def is_rejected(self, output, rejected_outputs):
         is_rejected = False
-        for rejected_output_index in range(len(rejected_outputs)):
-            if output == rejected_outputs[rejected_output_index]:
-                is_rejected = True
+        if rejected_outputs is not None:
+            for rejected_output_index in range(len(rejected_outputs)):
+                if output == rejected_outputs[rejected_output_index]:
+                    is_rejected = True
         return is_rejected
+
     def adjust_weights_biases(self, del_weight_bias_network):
         if self.constructed:
             for layer_index in range(len(self.neural_net)):
