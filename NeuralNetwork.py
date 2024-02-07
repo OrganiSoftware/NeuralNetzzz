@@ -5,9 +5,9 @@ from NeuralLayer import NeuralLayer
 
 
 class NeuralNetwork:
-    def __init__(self, size_of_output_layer, size_of_input_layer, activation_function, learning_rate, output_translation_table):
+    def __init__(self, output_translation_table, size_of_input_layer, activation_function, learning_rate):
         self.neural_net = []
-        self.size_of_output_layer = size_of_output_layer
+        self.size_of_output_layer = len(output_translation_table)
         self.output_translation_table = output_translation_table
         self.size_of_input_layer = size_of_input_layer
         self.activation_function = activation_function
@@ -56,7 +56,23 @@ class NeuralNetwork:
     """
     def load_weights(self, neural_memory_json):
     """
+    def ideal_activations_for_prediction(self, expected_output, rejected_outputs):
+        ideal_activations = []
+        for output_index in range(len(self.output_translation_table)):
+            if self.output_translation_table[output_index] == expected_output:
+                ideal_activations.append(1)
+            elif self.is_rejected(self.output_translation_table[output_index], rejected_outputs):
+                ideal_activations.append(-1)
+            else:
+                ideal_activations.append(0)
+        return ideal_activations
 
+    def is_rejected(self, output, rejected_outputs):
+        is_rejected = False
+        for rejected_output_index in range(len(rejected_outputs)):
+            if output == rejected_outputs[rejected_output_index]:
+                is_rejected = True
+        return is_rejected
     def adjust_weights_biases(self, del_weight_bias_network):
         if self.constructed:
             for layer_index in range(len(self.neural_net)):

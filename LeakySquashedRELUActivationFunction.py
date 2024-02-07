@@ -13,7 +13,6 @@ class LeakySquashedRELUActivationFunction:
         self.maximum_activation = maximum_activation
         self.max_activation_dual = DualNumber(maximum_activation, 0)
 
-
     def calculate(self, x):
         if x <= 0:
             if x * self.alpha <= -self.maximum_activation:

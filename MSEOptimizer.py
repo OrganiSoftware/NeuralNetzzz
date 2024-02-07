@@ -28,12 +28,14 @@ class MSEOptimizer:
         for interation in range(number_of_iterations):
             for training_state in range(len(self.training_set)):
                 self.comp_network_delta_organi_tensor(self.training_set.inputs[training_state],
-                                                      self.training_set.expected_outputs[training_state])
+                                                      self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[training_state],
+                                                                                                       self.training_set.rejected))
                 if (count % batch_sizes) == (batch_sizes - 1):
                     self.del_weight_bias_organi_tensor.average_del_weight_biases()
                     self.neural_net.adjust_weights_biases(self.del_weight_bias_organi_tensor)
                     self.del_weight_bias_organi_tensor.clear()
                 count += 1
+        return self.neural_net
 
     def comp_network_delta_organi_tensor(self, training_state_inputs, training_state_expected_outputs):
         self.neural_net.load_inputs(training_state_inputs)
