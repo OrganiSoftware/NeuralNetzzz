@@ -8,8 +8,8 @@ class DelWeightAndBiasLayerObj:
 
     def __init__(self, neural_layer):
         self.del_weight_bias_layer = []
-        for perceptron_index in range(neural_layer.num_preceptronms()):
-            del_weight_and_bias_obj = DelWeightAndBiasObj(neural_layer[perceptron_index])
+        for perceptron_index in range(neural_layer.num_perceptrons):
+            del_weight_and_bias_obj = DelWeightAndBiasObj(neural_layer.neural_layer[perceptron_index])
             self.del_weight_bias_layer.append(del_weight_and_bias_obj)
 
     def average_del_weight_bias(self):

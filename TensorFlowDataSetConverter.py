@@ -19,7 +19,7 @@ def main():
     neural_net.add_hidden_layers(20,10)
     neural_net.add_hidden_layers(10,5)
     neural_net.add_hidden_layers(20,10)
-    neural_net.constructed()
+    neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
     neural_net = mse_optimizer.train(1000, 100)
     count = 0

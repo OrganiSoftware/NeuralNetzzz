@@ -4,9 +4,10 @@
 from random import random
 from DualNumber import DualNumber
 
+
 class Perceptron:
 
-    def __int__(self, activation_funct, num_inputs, learning_rate):
+    def __init__(self, activation_funct, num_inputs, learning_rate):
         self.activation_funct = activation_funct
         self.num_inputs = num_inputs
         self.learning_rate = learning_rate
@@ -50,21 +51,21 @@ class Perceptron:
         for input_index in range(len(self.inputs)):
             if weight_index == input_index and not derivating_bias:
                 weight_dual_num = DualNumber(self.weights[input_index], 1)
-                input_dual_num = DualNumber(self.inputs, 0)
+                input_dual_num = DualNumber(self.inputs[input_index], 0)
                 bias_dual_num = DualNumber(self.bias,0)
             elif derivating_bias:
                 weight_dual_num = DualNumber(self.weights[input_index], 0)
-                input_dual_num = DualNumber(self.inputs, 0)
+                input_dual_num = DualNumber(self.inputs[input_index], 0)
                 bias_dual_num = DualNumber(self.bias, 1)
             else:
                 weight_dual_num = DualNumber(self.weights[input_index], 0)
-                input_dual_num = DualNumber(self.inputs, 0)
+                input_dual_num = DualNumber(self.inputs[input_index], 0)
                 bias_dual_num = DualNumber(self.bias, 0)
             if dual_weighted_sum is None:
                 dual_weighted_sum = (input_dual_num * weight_dual_num) + bias_dual_num
             else:
                 dual_weighted_sum = dual_weighted_sum + ((input_dual_num * weight_dual_num) + bias_dual_num)
             weighted_sum += self.inputs[input_index] * self.weights[input_index] + self.bias
-        return self.activation_funct.comp_partial(dual_weighted_sum)
+        return self.activation_funct.comp_partial(weighted_sum, dual_weighted_sum)
 
 

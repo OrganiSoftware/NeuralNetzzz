@@ -17,14 +17,14 @@ class NeuralNetwork:
     def add_hidden_layers(self, num_layers, size_of_layers):
         if not self.constructed:
             for layer_index in range(num_layers):
-                if self.neural_net is None:
+                if len(self.neural_net) == 0:
                     num_inputs = self.size_of_input_layer
                 else:
                     num_inputs = len(self.neural_net[len(self.neural_net) - 1].neural_layer)
                 layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate)
                 self.neural_net.append(layer)
 
-    def constructed(self):
+    def is_constructed(self):
         if not self.constructed:
             self.add_hidden_layers(1, self.size_of_output_layer)
             self.constructed = True

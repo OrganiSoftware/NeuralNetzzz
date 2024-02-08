@@ -3,11 +3,13 @@
 """
 from math import pow
 from numpy import log
+
+
 class DualNumber:
 
     def __init__(self, real, dual):
-        self.real = real
-        self.dual = dual
+        self.r = real
+        self.d = dual
 
     def __add__(self, dual_num):
         return self.add(dual_num)
@@ -28,38 +30,38 @@ class DualNumber:
         return self.divide(dual_num)
 
     def real(self):
-        return self.real
+        return self.r
 
     def dual(self):
-        return self.dual
+        return self.d
 
     def add(self, dual_num):
-        new_real = self.real + dual_num.real
-        new_dual = self.dual + dual_num.dual
+        new_real = self.r + dual_num.r
+        new_dual = self.d + dual_num.d
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
     def sub(self, dual_num):
-        new_real = self.real - dual_num.real
-        new_dual = self.dual - dual_num.dual
+        new_real = self.r - dual_num.r
+        new_dual = self.d - dual_num.d
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
     def divide(self, dual_num):
-        new_real = self.real / dual_num.real()
-        new_dual = ((dual_num.real() * self.dual) - (self.real * dual_num.dual())) / dual_num.real() ** 2
+        new_real = self.r / dual_num.real()
+        new_dual = ((dual_num.r * self.d) - (self.r * dual_num.d)) / dual_num.r ** 2
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
     def multiply(self, dual_num):
-        new_real = self.real * dual_num.real()
-        new_dual = (self.real * dual_num.dual()) + (dual_num.real() * self.dual)
+        new_real = self.r * dual_num.r
+        new_dual = (self.r * dual_num.d) + (dual_num.r * self.d)
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
-    def dual_pow_dual(self,dual_num):
-        new_real = pow(self.real, dual_num.real())
-        new_dual = (new_real * dual_num.dual() * log(self.real)) + ((new_real * self.dual * dual_num.real()) / self.real)
+    def dual_pow_dual(self, dual_num):
+        new_real = pow(self.r, dual_num.r)
+        new_dual = (new_real * dual_num.d * log(self.r)) + ((new_real * self.d * dual_num.r) / self.r)
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
@@ -67,11 +69,11 @@ class DualNumber:
         new_real = 0
         new_dual = 0
         if power > 0:
-            new_real = pow(self.real, power)
-            new_dual = power * pow(self.real, power - 1) * self.dual
+            new_real = pow(self.r, power)
+            new_dual = power * pow(self.r, power - 1) * self.d
         elif power < 0:
-            new_real = (pow(self.real, power) / pow(self.real, 2 * abs(power)))
-            new_dual = -((2 * self.real * self.dual) / pow(self.real, 2 * abs(power)))
+            new_real = (pow(self.r, power) / pow(self.r, 2 * abs(power)))
+            new_dual = -((2 * self.r * self.d) / pow(self.r, 2 * abs(power)))
         else:
             new_real = 1
             new_dual = 0
@@ -79,8 +81,8 @@ class DualNumber:
         return new_dual_num
 
     def nth_root(self, n):
-        new_real = pow(self.real, 1/n)
-        new_dual = (new_real * self.dual) / (2 * self.real)
+        new_real = pow(self.r, 1/n)
+        new_dual = (new_real * self.d) / (2 * self.r)
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
