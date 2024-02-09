@@ -24,12 +24,13 @@ def main():
     neural_net = mse_optimizer.train(1, 2000)
     count = 0
     for inputs in range(len(test_data_set.inputs)):
-        predicted_output = neural_net.predict_output(test_data_set.inputs[inputs])
-        print(str(predicted_output))
-        print(str(train_data_set.expected_outputs[inputs]))
-        if predicted_output == train_data_set.expected_outputs[inputs]:
-            count += 1
-        print(str((count/(inputs + 1))*100))
+        if not len(test_data_set.inputs[inputs]) == 0:
+            predicted_output = neural_net.predict_output(test_data_set.inputs[inputs])
+            print(str(predicted_output))
+            print(str(train_data_set.expected_outputs[inputs]))
+            if predicted_output == train_data_set.expected_outputs[inputs]:
+                count += 1
+            print(str((count/(inputs + 1))*100))
 
 
 def convert(x_train, y_train):
