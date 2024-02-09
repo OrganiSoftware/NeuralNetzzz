@@ -21,12 +21,11 @@ class DelWeightAndBiasObj:
             self.num_weight_calcs += 1
 
     def average_del_weights_bias(self):
-        if not self.averaged:
+        if not self.averaged and not self.num_weight_calcs == 0:
             for weight_index in range(len(self.del_weights)):
                 self.del_weights[weight_index] = self.del_weights[weight_index] / self.num_weight_calcs
             self.del_bias = self.del_bias / self.num_weight_calcs
-        self.averaged = True
-
+            self.averaged = True
     def del_weights(self):
         if self.averaged:
             return self.del_weights
@@ -36,6 +35,8 @@ class DelWeightAndBiasObj:
         self.del_bias = 0
         for weight_index in range(len(self.del_weights)):
             self.del_weights[weight_index] = 0
+        self.averaged = False
+        self.num_weight_calcs = 0
     def del_bias(self):
         if self.averaged:
             return self.del_bias

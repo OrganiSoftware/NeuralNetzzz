@@ -36,32 +36,32 @@ class DualNumber:
         return self.d
 
     def add(self, dual_num):
-        new_real = self.r + dual_num.r
-        new_dual = self.d + dual_num.d
+        new_real = self.r + dual_num.real()
+        new_dual = self.d + dual_num.dual()
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
     def sub(self, dual_num):
-        new_real = self.r - dual_num.r
-        new_dual = self.d - dual_num.d
+        new_real = self.r - dual_num.real()
+        new_dual = self.d - dual_num.dual()
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
     def divide(self, dual_num):
         new_real = self.r / dual_num.real()
-        new_dual = ((dual_num.r * self.d) - (self.r * dual_num.d)) / dual_num.r ** 2
+        new_dual = ((dual_num.real() * self.d) - (self.r * dual_num.dual())) / dual_num.real() ** 2
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
     def multiply(self, dual_num):
-        new_real = self.r * dual_num.r
-        new_dual = (self.r * dual_num.d) + (dual_num.r * self.d)
+        new_real = self.r * dual_num.real()
+        new_dual = (self.r * dual_num.dual()) + (dual_num.real() * self.d)
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 
     def dual_pow_dual(self, dual_num):
-        new_real = pow(self.r, dual_num.r)
-        new_dual = (new_real * dual_num.d * log(self.r)) + ((new_real * self.d * dual_num.r) / self.r)
+        new_real = pow(self.r, dual_num.real())
+        new_dual = (new_real * dual_num.dual() * log(self.r)) + ((new_real * self.d * dual_num.real()) / self.r)
         new_dual_num = DualNumber(new_real, new_dual)
         return new_dual_num
 

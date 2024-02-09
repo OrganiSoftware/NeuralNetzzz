@@ -82,5 +82,5 @@ class NeuralNetwork:
     def adjust_weights_biases(self, del_weight_bias_network):
         if self.constructed:
             for layer_index in range(len(self.neural_net)):
-                self.neural_net[layer_index].adjust_weights_biases(del_weight_bias_network[layer_index])
+                self.neural_net[layer_index].adjust_weights_biases(del_weight_bias_network.del_weight_and_bias_network[layer_index])
 

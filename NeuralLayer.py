@@ -32,5 +32,5 @@ class NeuralLayer:
 
     def adjust_weights_biases(self, del_weight_bias_layer):
         for perceptron_index in range(self.num_perceptrons):
-            self.neural_layer[perceptron_index].adjust_weights(del_weight_bias_layer[perceptron_index])
-            self.neural_layer[perceptron_index].adjust_bias(del_weight_bias_layer[perceptron_index].del_bias())
+            self.neural_layer[perceptron_index].adjust_weights(del_weight_bias_layer.del_weight_bias_layer[perceptron_index])
+            self.neural_layer[perceptron_index].adjust_bias(del_weight_bias_layer.del_weight_bias_layer[perceptron_index].del_bias)

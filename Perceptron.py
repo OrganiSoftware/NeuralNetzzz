@@ -20,7 +20,7 @@ class Perceptron:
 
     def activate(self):
         weighted_sum = 0
-        for input_index in range(len(self.inputs)):
+        for input_index in range(self.num_inputs):
             weighted_sum += self.inputs[input_index] * self.weights[input_index] + self.bias
         return self.activation_funct.calculate(weighted_sum)
 
@@ -31,8 +31,8 @@ class Perceptron:
         return self.weights[input_index]
 
     def adjust_weights(self, del_weights):
-        for weight_index in range(len(self.weights)):
-            self.weights[weight_index] = self.weights[weight_index] - (self.learning_rate * del_weights[weight_index])
+        for weight_index in range(self.num_inputs):
+            self.weights[weight_index] = self.weights[weight_index] - (self.learning_rate * del_weights.del_weights[weight_index])
 
     def number_of_inputs(self):
         return self.num_inputs
@@ -49,7 +49,7 @@ class Perceptron:
         weighted_sum = 0
         dual_weighted_sum = None
         for input_index in range(len(self.inputs)):
-            if weight_index == input_index and not derivating_bias:
+            if weight_index == input_index and not derivating_bias and weight_index is not None:
                 weight_dual_num = DualNumber(self.weights[input_index], 1)
                 input_dual_num = DualNumber(self.inputs[input_index], 0)
                 bias_dual_num = DualNumber(self.bias,0)
