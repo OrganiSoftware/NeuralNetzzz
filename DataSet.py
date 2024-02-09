@@ -29,27 +29,29 @@ class DataSet:
 
     def store_in_json(self, path):
         with open(str(path), 'w', encoding="utf-8") as jsonWriter:
+            array = []
             for input_state_index in range(len(self.expected_outputs)):
-                jsonWriter.write(json.dumps({"inputs": self.inputs[input_state_index],
-                                             "expected_output": self.expected_outputs[input_state_index],
-                                             "rejected_outputs": self.rejected_outputs[input_state_index],
-                                             "num_inputs": len(self.inputs),
-                                             "num_states"+str(input_state_index): len(self.inputs[input_state_index]),
-                                             "max": self.normalized_max,
-                                             "min": self.normalized_min}))
+                array.append({"inputs": self.inputs[input_state_index],
+                              "expected_output": self.expected_outputs[input_state_index],
+                              "rejected_outputs": self.rejected_outputs[input_state_index],
+                              "num_inputs": len(self.inputs),
+                              "num_states": len(self.inputs[input_state_index]),
+                              "max": self.normalized_max,
+                              "min": self.normalized_min})
+            jsonWriter.write(json.dumps({"DataSet": array}))
             jsonWriter.close()
 
     def json_load(self, path):
         with open(str(path), 'r') as jsonReader:
-            json_data = json.loads(json.dumps(jsonReader.read()))
-            print(json_data)
-            self.max_value = json_data[0]['max']
-            self.min_value = json_data[0]['min']
-            for input_state_index in range(len(json_data)):
-                inputs = json_data[input_state_index]["inputs"]
-                expected_output = json_data[input_state_index]["expected_output"]
-                rejected_outputs = json_data[input_state_index]["rejected_outputs"]
+            json_data = json.load(jsonReader)
+            for input_state in json_data['DataSet']:
+                inputs = input_state['inputs']
+                expected_output = input_state["expected_output"]
+                rejected_outputs = input_state["rejected_outputs"]
+                self.max_value = input_state['max']
+                self.min_value = input_state['min']
                 self.add_state(inputs,expected_output,rejected_outputs)
+
             jsonReader.close()
 
 

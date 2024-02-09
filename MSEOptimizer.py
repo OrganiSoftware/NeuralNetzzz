@@ -25,24 +25,29 @@ class MSEOptimizer:
 
     def train(self, number_of_iterations, batch_sizes):
         count = 0
+        training_state_loaded = False
         for interation in range(number_of_iterations):
             for training_state in range(len(self.training_set.expected_outputs)):
-                self.neural_net.load_inputs(self.training_set.inputs[training_state])
-                if training_state == 0:
-                    self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
-                self.comp_network_delta_organi_tensor(self.training_set.inputs[training_state],
-                                                      self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[training_state],
-                                                                                                       self.training_set.rejected_outputs[training_state]))
-                if (count % batch_sizes) == (batch_sizes - 1):
-                    self.del_weight_bias_organi_tensor.average_del_weight_biases()
-                    self.neural_net.adjust_weights_biases(self.del_weight_bias_organi_tensor)
-                    self.del_weight_bias_organi_tensor.clear()
-                count += 1
+                print(str(training_state))
+                if not len(self.training_set.inputs[training_state]) == 0:
+                    self.neural_net.load_inputs(self.training_set.inputs[training_state])
+                    if not training_state_loaded:
+                        self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
+                        training_state_loaded = True
+                    self.comp_network_delta_organi_tensor(self.training_set.inputs[training_state],
+                                                          self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[training_state],
+                                                                                                           self.training_set.rejected_outputs[training_state]))
+                    if (count % batch_sizes) == (batch_sizes - 1):
+                        self.del_weight_bias_organi_tensor.average_del_weight_biases()
+                        self.neural_net.adjust_weights_biases(self.del_weight_bias_organi_tensor)
+                        self.del_weight_bias_organi_tensor.clear()
+                    count += 1
         return self.neural_net
 
     def comp_network_delta_organi_tensor(self, training_state_inputs, training_state_expected_outputs):
         self.neural_net.load_inputs(training_state_inputs)
         for output_perceptron in range(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer)):
+            print(str(output_perceptron))
             del_weights = []
             m = DualNumber(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer), 0)
             dual_expected = DualNumber(training_state_expected_outputs[output_perceptron], 0)
@@ -63,6 +68,7 @@ class MSEOptimizer:
     def propagate_through_hidden_layers(self, dual_expected, m, training_state_inputs):
         self.neural_net.load_inputs(training_state_inputs)
         for neural_layer in range(len(self.neural_net.neural_net) - 2):
+            print(str(neural_layer))
             index = len(self.neural_net.neural_net) - (neural_layer + 2)
             for perceptron in range(len(self.neural_net.neural_net[index].neural_layer)):
                 del_weights = []

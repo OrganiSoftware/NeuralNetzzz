@@ -1,26 +1,24 @@
 """
 @author Antonio Bruce Webb(Organi)
 """
-import tensorflow as tf
 from DataSet import DataSet
 from NeuralNetwork import NeuralNetwork
 from MSEOptimizer import MSEOptimizer
 from SigmoidalActivationFunction import SigmoidalActivationFuction
 def main():
-    mnist = tf.keras.datasets.mnist
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-    train_data_set = convert(x_train, y_train)
-    train_data_set.store_in_json("/run/media/organi/Work/mnist_train.json")
-    test_data_set = convert(x_test, y_test)
-    test_data_set.store_in_json("/run/media/organi/Work/mnist_test.json")
+    train_data_set = DataSet(1,0)
+    test_data_set = DataSet(1,0)
+    train_data_set.json_load("/run/media/organi/Work/mnist_train.json")
+    test_data_set.json_load("/run/media/organi/Work/mnist_test.json")
     sigmoid = SigmoidalActivationFuction()
     output_translation_table = []
     for index in range(10):
         output_translation_table.append(index)
     neural_net = NeuralNetwork(output_translation_table, len(train_data_set.inputs[0]), sigmoid, 0.1)
-    neural_net.add_hidden_layers(20,10)
-    neural_net.add_hidden_layers(10,5)
-    neural_net.add_hidden_layers(20,10)
+    neural_net.add_hidden_layers(1,20)
+    neural_net.add_hidden_layers(1,10)
+    neural_net.add_hidden_layers(1,10)
+    neural_net.add_hidden_layers(1, 20)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
     neural_net = mse_optimizer.train(1, 2000)
