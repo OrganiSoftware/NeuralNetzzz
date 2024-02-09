@@ -30,8 +30,7 @@ class NeuralNetwork:
             self.constructed = True
 
     def predict_output(self, inputs):
-        if self.constructed:
-           self.load_inputs(inputs)
+        self.load_inputs(inputs)
         output_layer_activations = self.neural_net[len(self.neural_net) - 1].activations()
         predicted_output_value = 0
         predicted_output_index = 0

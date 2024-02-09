@@ -48,7 +48,7 @@ class Perceptron:
     def comp_partial(self, weight_index, derivating_bias):
         weighted_sum = 0
         dual_weighted_sum = None
-        for input_index in range(len(self.inputs)):
+        for input_index in range(self.num_inputs):
             if weight_index == input_index and not derivating_bias and weight_index is not None:
                 weight_dual_num = DualNumber(self.weights[input_index], 1)
                 input_dual_num = DualNumber(self.inputs[input_index], 0)
