@@ -2,7 +2,7 @@
 @author Antonio Bruce Webb(Organi)
 """
 from NeuralLayer import NeuralLayer
-
+import json
 
 class NeuralNetwork:
     def __init__(self, output_translation_table, size_of_input_layer, activation_function, learning_rate):
@@ -14,13 +14,14 @@ class NeuralNetwork:
         self.learning_rate = learning_rate
         self.constructed = False
 
+    def add_input_layer(self, num_perceptrons):
+        layer = NeuralLayer(self.size_of_input_layer, num_perceptrons, self.activation_function, self.learning_rate)
+        self.neural_net.append(layer)
+
     def add_hidden_layers(self, num_layers, size_of_layers):
         if not self.constructed:
             for layer_index in range(num_layers):
-                if len(self.neural_net) == 0:
-                    num_inputs = self.size_of_input_layer
-                else:
-                    num_inputs = len(self.neural_net[len(self.neural_net) - 1].neural_layer)
+                num_inputs = len(self.neural_net[len(self.neural_net) - 1].neural_layer)
                 layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate)
                 self.neural_net.append(layer)
 
@@ -35,6 +36,7 @@ class NeuralNetwork:
         predicted_output_value = 0
         predicted_output_index = 0
         for output_index in range(len(output_layer_activations)):
+            print(str(output_layer_activations[output_index]))
             if predicted_output_value < output_layer_activations[output_index]:
                 predicted_output_value = output_layer_activations[output_index]
                 predicted_output_index = output_index
@@ -56,9 +58,6 @@ class NeuralNetwork:
     def num_neural_layers(self):
         return len(self.neural_net)
 
-    """
-    def load_weights(self, neural_memory_json):
-    """
     def ideal_activations_for_prediction(self, expected_output, rejected_outputs):
         ideal_activations = []
         for output_index in range(len(self.output_translation_table)):
@@ -69,6 +68,28 @@ class NeuralNetwork:
             else:
                 ideal_activations.append(0)
         return ideal_activations
+
+    def save_weights_biases(self, path):
+        with open(str(path), 'w', encoding="utf-8") as jsonWriter:
+            data = []
+            for layer_index in range(len(self.neural_net)):
+                weights = []
+                for perceptron_index in range(len(self.neural_net[layer_index].neural_layer)):
+                    weights.append({"weights": self.neural_net[layer_index].neural_layer[perceptron_index].weights,
+                                    "bias" : self.neural_net[layer_index].neural_layer[perceptron_index].bias})
+                data.append({"layer": weights})
+            jsonWriter.write(json.dumps({"DataSet": data}))
+            jsonWriter.close()
+
+    def load_weights_biases(self, path):
+        with open(str(path), 'r') as jsonReader:
+            json_data = json.load(jsonReader)
+            for layer in range(len(json_data["DataSet"])):
+                for perceptron in range(len(json_data["DataSet"][layer]["layer"])):
+                    weights = json_data["DataSet"][layer]["layer"][perceptron]["weights"]
+                    bias = json_data["DataSet"][layer]["layer"][perceptron]["bias"]
+                    self.neural_net[layer].neural_layer[perceptron].load_weights_bias(weights, bias)
+            jsonReader.close()
 
     def is_rejected(self, output, rejected_outputs):
         is_rejected = False

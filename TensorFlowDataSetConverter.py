@@ -8,25 +8,32 @@ from SigmoidalActivationFunction import SigmoidalActivationFuction
 def main():
     train_data_set = DataSet(1,0)
     test_data_set = DataSet(1,0)
-    train_data_set.json_load("/home/ghost/mnist_train.json")
-    test_data_set.json_load("/home/ghost/mnist_test.json")
+    train_data_set.json_load("/run/media/organi/Work/mnist_train.json", 56)
+    test_data_set.json_load("/run/media/organi/Work/mnist_test.json", 56)
     sigmoid = SigmoidalActivationFuction()
     output_translation_table = []
     for index in range(10):
         output_translation_table.append(index)
-    neural_net = NeuralNetwork(output_translation_table, len(train_data_set.inputs[0]), sigmoid, 0.1)
+    num_inputs = 0
+    for train_data_state in range(len(train_data_set.inputs)):
+        if not len(train_data_set.inputs[train_data_state]) == 0:
+            num_inputs = len(train_data_set.inputs[train_data_state])
+            break
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, 1.0)
+    neural_net.add_input_layer(10)
     neural_net.add_hidden_layers(1,10)
     neural_net.add_hidden_layers(1,10)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(1, 2000)
+    neural_net = mse_optimizer.train(1,100)
+    neural_net.load_weights_biases("/run/media/organi/Work/mnist_weights_bias.json")
     count = 0
-    for inputs in range(len(test_data_set.inputs)):
+    for inputs in range(len(test_data_set.expected_outputs)):
         if not len(test_data_set.inputs[inputs]) == 0:
             predicted_output = neural_net.predict_output(test_data_set.inputs[inputs])
             print(str(predicted_output))
-            print(str(train_data_set.expected_outputs[inputs]))
-            if predicted_output == train_data_set.expected_outputs[inputs]:
+            print(str(test_data_set.expected_outputs[inputs]))
+            if predicted_output == test_data_set.expected_outputs[inputs]:
                 count += 1
             print(str((count/(inputs + 1))*100))
 

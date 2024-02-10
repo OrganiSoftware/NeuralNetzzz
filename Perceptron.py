@@ -43,7 +43,9 @@ class Perceptron:
     def load_inputs(self, inputs):
         self.inputs = inputs
 
-    #def load_weights(self):
+    def load_weights_bias(self, weights, bias):
+        self.weights = weights
+        self.bias = bias
 
     def comp_partial(self, weight_index, derivating_bias):
         weighted_sum = 0

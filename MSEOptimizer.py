@@ -37,8 +37,7 @@ class MSEOptimizer:
                     if not training_state_loaded:
                         self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
                         training_state_loaded = True
-                    self.comp_network_delta_organi_tensor(self.training_set.inputs[training_state],
-                                                          self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[training_state],
+                    self.comp_network_delta_organi_tensor(self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[training_state],
                                                                                                            self.training_set.rejected_outputs[training_state]))
                     if (count % batch_sizes) == (batch_sizes - 1):
                         self.del_weight_bias_organi_tensor.average_del_weight_biases()
@@ -48,12 +47,11 @@ class MSEOptimizer:
                     if int((count/total_interations) * 100) % 100 > tick_count:
                         tick_count += 1
                         status_string += "#"
-                        print(str(int((count/total_interations) * 100) % 100 )+"%: "+str(status_string))
+                        print(str(int((count/total_interations) * 100) % 100)+"%: "+str(status_string))
 
         return self.neural_net
 
-    def comp_network_delta_organi_tensor(self, training_state_inputs, training_state_expected_outputs):
-        self.neural_net.load_inputs(training_state_inputs)
+    def comp_network_delta_organi_tensor(self, training_state_expected_outputs):
         for output_perceptron in range(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer)):
             del_weights = []
             m = DualNumber(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer), 0)
@@ -70,10 +68,9 @@ class MSEOptimizer:
                 del_weights.append(del_weight)
             self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(len(self.neural_net.neural_net) - 1, output_perceptron, del_weights,
                                                                             del_bias)
-            self.propagate_through_hidden_layers(dual_expected, m, training_state_inputs)
+            self.propagate_through_hidden_layers(dual_expected, m)
 
-    def propagate_through_hidden_layers(self, dual_expected, m, training_state_inputs):
-        self.neural_net.load_inputs(training_state_inputs)
+    def propagate_through_hidden_layers(self, dual_expected, m):
         for neural_layer in range(len(self.neural_net.neural_net) - 1):
             index = len(self.neural_net.neural_net) - (neural_layer + 2)
             for perceptron in range(len(self.neural_net.neural_net[index].neural_layer)):

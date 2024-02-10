@@ -41,16 +41,29 @@ class DataSet:
             jsonWriter.write(json.dumps({"DataSet": array}))
             jsonWriter.close()
 
-    def json_load(self, path):
+    def json_load(self, path, size_of_subset):
         with open(str(path), 'r') as jsonReader:
             json_data = json.load(jsonReader)
             for input_state in json_data['DataSet']:
+                subset = []
                 inputs = input_state['inputs']
+                average = 0
+                count = 0
+                for input in range(len(inputs)):
+                    if input % (size_of_subset -1) == 0 and not input == 0:
+                        subset.append(average/count)
+                        count = 0
+                        average = 0
+                    else:
+                        average += inputs[input]
+                        count += 1
+                if not average == 0:
+                    subset.append(average/count)
                 expected_output = input_state["expected_output"]
                 rejected_outputs = input_state["rejected_outputs"]
                 self.max_value = input_state['max']
                 self.min_value = input_state['min']
-                self.add_state(inputs,expected_output,rejected_outputs)
+                self.add_state(subset,expected_output,rejected_outputs)
 
             jsonReader.close()
 
