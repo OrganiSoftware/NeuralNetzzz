@@ -51,7 +51,6 @@ class NeuralNetwork:
                 activations = self.neural_net[layer_index - 1].activations()
                 self.neural_net[layer_index].load_inputs(activations)
 
-
     def layer_at_index(self, layer_index):
         return self.neural_net[layer_index]
 
@@ -76,7 +75,7 @@ class NeuralNetwork:
                 weights = []
                 for perceptron_index in range(len(self.neural_net[layer_index].neural_layer)):
                     weights.append({"weights": self.neural_net[layer_index].neural_layer[perceptron_index].weights,
-                                    "bias" : self.neural_net[layer_index].neural_layer[perceptron_index].bias})
+                                    "bias": self.neural_net[layer_index].neural_layer[perceptron_index].bias})
                 data.append({"layer": weights})
             jsonWriter.write(json.dumps({"DataSet": data}))
             jsonWriter.close()
@@ -91,7 +90,8 @@ class NeuralNetwork:
                     self.neural_net[layer].neural_layer[perceptron].load_weights_bias(weights, bias)
             jsonReader.close()
 
-    def is_rejected(self, output, rejected_outputs):
+    @staticmethod
+    def is_rejected(output, rejected_outputs):
         is_rejected = False
         if rejected_outputs is not None:
             for rejected_output_index in range(len(rejected_outputs)):

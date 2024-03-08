@@ -28,8 +28,8 @@ class MSEOptimizer:
         training_state_loaded = False
         status_string = ""
         tick_count = 0
-        total_interations = number_of_iterations * len(self.training_set.expected_outputs)
-        print(str(int((count / total_interations) * 100) % 100) + "%: " + str(status_string))
+        total_iterations = number_of_iterations * len(self.training_set.expected_outputs)
+        print(str(int((count / total_iterations) * 100) % 100) + "%: " + str(status_string))
         for interation in range(number_of_iterations):
             for training_state in range(len(self.training_set.expected_outputs)):
                 if not len(self.training_set.inputs[training_state]) == 0:
@@ -44,10 +44,10 @@ class MSEOptimizer:
                         self.neural_net.adjust_weights_biases(self.del_weight_bias_organi_tensor)
                         self.del_weight_bias_organi_tensor.clear()
                     count += 1
-                    if int((count/total_interations) * 100) % 100 > tick_count:
+                    if int((count/total_iterations) * 100) % 100 > tick_count:
                         tick_count += 1
                         status_string += "#"
-                        print(str(int((count/total_interations) * 100) % 100)+"%: "+str(status_string))
+                        print(str(int((count/total_iterations) * 100) % 100)+"%: "+str(status_string))
 
         return self.neural_net
 

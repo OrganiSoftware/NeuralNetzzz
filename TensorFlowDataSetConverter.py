@@ -49,5 +49,6 @@ def convert(x_train, y_train):
         data_set.add_state(inputs, expected_output, None)
     return data_set
 
+
 if __name__ == "__main__":
     main()

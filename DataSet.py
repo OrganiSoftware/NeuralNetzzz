@@ -3,6 +3,8 @@
 """
 
 import json
+
+
 class DataSet:
 
     def __init__(self, max_value, min_value):
@@ -66,7 +68,6 @@ class DataSet:
                 self.add_state(subset,expected_output,rejected_outputs)
 
             jsonReader.close()
-
 
     def delete_state(self, input_index):
         temp_inputs = [[]]

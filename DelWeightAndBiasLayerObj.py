@@ -33,6 +33,7 @@ class DelWeightAndBiasLayerObj:
         for perceptron_index in range(len(self.del_weight_bias_layer)):
             biases.append(self.del_weight_bias_layer[perceptron_index].del_bias())
         return biases
+
     def clear(self):
         for perceptron_index in range(len(self.del_weight_bias_layer)):
             self.del_weight_bias_layer[perceptron_index].clear()

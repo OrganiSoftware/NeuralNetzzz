@@ -5,6 +5,7 @@ from math import e
 from math import pow
 from DualNumber import DualNumber
 
+
 class HyperbolicTangentActivationFunction:
 
     def __init__(self):

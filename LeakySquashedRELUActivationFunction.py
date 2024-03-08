@@ -2,7 +2,6 @@
 @author Antonio Bruce Webb(Organi)
 """
 
-from FunctionParser import FunctionParser
 from DualNumber import DualNumber
 
 class LeakySquashedRELUActivationFunction:
@@ -39,3 +38,4 @@ class LeakySquashedRELUActivationFunction:
             else:
                 dual_partial = dual_num / self.max_activation_dual
         return dual_partial
+
