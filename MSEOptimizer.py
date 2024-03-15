@@ -28,27 +28,26 @@ class MSEOptimizer:
         training_state_loaded = False
         status_string = ""
         tick_count = 0
-        total_iterations = number_of_iterations * len(self.training_set.expected_outputs)
+        total_iterations = int(number_of_iterations * len(self.training_set.expected_outputs))
         print(str(int((count / total_iterations) * 100) % 100) + "%: " + str(status_string))
-        for interation in range(number_of_iterations):
-            for training_state in range(len(self.training_set.expected_outputs)):
-                if not len(self.training_set.inputs[training_state]) == 0:
-                    self.neural_net.load_inputs(self.training_set.inputs[training_state])
-                    if not training_state_loaded:
-                        self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
-                        training_state_loaded = True
-                    self.del_weight_bias_organi_tensor = self.neural_net.comp_partial(self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[training_state],
-                                                                                                           self.training_set.rejected_outputs[training_state]),
+        for training_state in range(total_iterations):
+            state = training_state % len(self.training_set.expected_outputs)
+            if not len(self.training_set.inputs[state]) == 0:
+                self.neural_net.load_inputs(self.training_set.inputs[state])
+                if not training_state_loaded:
+                    self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
+                    training_state_loaded = True
+                self.del_weight_bias_organi_tensor = self.neural_net.comp_partial(self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[state],
+                                                                                                           self.training_set.rejected_outputs[state]),
                                                  self.del_weight_bias_organi_tensor)
-                    if (count % batch_sizes) == (batch_sizes - 1):
-                        self.del_weight_bias_organi_tensor.average_del_weight_biases()
-                        self.neural_net.adjust_weights_biases(self.del_weight_bias_organi_tensor)
-                        self.del_weight_bias_organi_tensor.clear()
-                    count += 1
-                    if int((count/total_iterations) * 100) % 100 > tick_count:
-                        tick_count += 1
-                        status_string += "#"
-                        print(str(int((count/total_iterations) * 100) % 100)+"%: "+str(status_string))
-
+                if (count % batch_sizes) == (batch_sizes - 1):
+                    self.del_weight_bias_organi_tensor.average_del_weight_biases()
+                    self.neural_net.adjust_weights_biases(self.del_weight_bias_organi_tensor)
+                    self.del_weight_bias_organi_tensor.clear()
+                count += 1
+                if int((count/total_iterations) * 100) % 100 > tick_count:
+                    tick_count += 1
+                    status_string += "#"
+                    print(str(int((count/total_iterations) * 100) % 100)+"%: "+str(status_string))
         return self.neural_net
 

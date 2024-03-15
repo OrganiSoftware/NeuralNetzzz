@@ -8,8 +8,8 @@ from SigmoidalActivationFunction import SigmoidalActivationFuction
 def main():
     train_data_set = DataSet(1,0)
     test_data_set = DataSet(1,0)
-    train_data_set.json_load("/run/media/organi/Work/mnist_train.json", 56)
-    test_data_set.json_load("/run/media/organi/Work/mnist_test.json", 56)
+    train_data_set.json_load("/run/media/organi/Work/mnist_train.json", 54)
+    test_data_set.json_load("/run/media/organi/Work/mnist_test.json", 54)
     sigmoid = SigmoidalActivationFuction()
     output_translation_table = []
     for index in range(10):
@@ -19,14 +19,14 @@ def main():
         if not len(train_data_set.inputs[train_data_state]) == 0:
             num_inputs = len(train_data_set.inputs[train_data_state])
             break
-    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, 1.0)
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, .1)
     neural_net.add_input_layer(10)
     neural_net.add_hidden_layers(1,10)
     neural_net.add_hidden_layers(1,10)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(1,100)
-    neural_net.load_weights_biases("/run/media/organi/Work/mnist_weights_bias.json")
+    neural_net = mse_optimizer.train(.25,100)
+    neural_net.save_weights_biases("/run/media/organi/Work/mnist_weights_bias.json")
     count = 0
     for inputs in range(len(test_data_set.expected_outputs)):
         if not len(test_data_set.inputs[inputs]) == 0:

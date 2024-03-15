@@ -52,8 +52,11 @@ class DataSet:
                 average = 0
                 count = 0
                 for input in range(len(inputs)):
-                    if input % (size_of_subset -1) == 0 and not input == 0:
-                        subset.append(average/count)
+                    if input % (size_of_subset) == 0 and not input == 0:
+                        if not count == 0:
+                            subset.append(average/count)
+                        else:
+                            subset.append(inputs[input])
                         count = 0
                         average = 0
                     else:
