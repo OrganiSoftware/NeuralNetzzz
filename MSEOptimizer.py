@@ -52,7 +52,7 @@ class MSEOptimizer:
         return self.neural_net
 
     def comp_partial(self, ideal_activations):
-        for layer_index in range(len(self.neural_net)):
+        for layer_index in range(len(self.neural_net.neural_net)):
             for perceptron_index in range(len(self.neural_net.neural_net[layer_index].neural_layer)):
                 del_weights_dual_list = []
                 del_bias_dual = DualNumber(0, 0)

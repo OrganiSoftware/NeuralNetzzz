@@ -5,6 +5,7 @@ from NeuralLayer import NeuralLayer
 from DualNumber import DualNumber
 import json
 
+
 class NeuralNetwork:
     def __init__(self, output_translation_table, size_of_input_layer, activation_function, learning_rate):
         self.neural_net = []
