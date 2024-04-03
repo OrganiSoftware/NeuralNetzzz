@@ -102,19 +102,28 @@ class MSEOptimizer:
                         else:
                             initial_dual_layer_activations = dual_layer_activations
                     dual_partial = DualNumber(0, 0)
-                    for output_index in range(len(ideal_activations)):
-                        if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
-                            dual_expected_activation = DualNumber(ideal_activations[output_index], 0)
-                            dual_partial = dual_partial + (initial_dual_bias_layer_activations[
+                    if not layer_index == (len(self.neural_net.neural_net) - 1):
+                        for output_index in range(len(ideal_activations)):
+                            if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
+                                dual_expected_activation = DualNumber(ideal_activations[output_index], 0)
+                                dual_partial = dual_partial + (initial_dual_bias_layer_activations[
                                                                output_index] - dual_expected_activation) ** 2
+                            else:
+                                dual_expected_activation = DualNumber(ideal_activations[output_index], 0)
+                                dual_partial = dual_partial + (
+                                            initial_dual_layer_activations[output_index] - dual_expected_activation) ** 2
+                        if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
+                            del_bias_dual = dual_partial / DualNumber(len(ideal_activations), 0)
                         else:
-                            dual_expected_activation = DualNumber(ideal_activations[output_index], 0)
-                            dual_partial = dual_partial + (
-                                        initial_dual_layer_activations[output_index] - dual_expected_activation) ** 2
-                    if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
-                        del_bias_dual = dual_partial
+                            del_weights_dual_list.append(dual_partial / DualNumber(len(ideal_activations), 0))
                     else:
-                        del_weights_dual_list.append(dual_partial)
+                        dual_expected_activation = DualNumber(ideal_activations[perceptron_index], 0)
+                        if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
+                            del_bias_dual = initial_dual_bias_layer_activations[perceptron_index]
+                        else:
+                            dual_partial = (initial_dual_layer_activations[
+                                                perceptron_index] - dual_expected_activation) ** 2
+                            del_weights_dual_list.append(dual_partial)
 
                 self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(layer_index, perceptron_index,
                                                                                 del_weights_dual_list, del_bias_dual)

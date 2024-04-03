@@ -25,11 +25,12 @@ def main():
     neural_net.add_hidden_layers(1,10)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(.25,100)
-    neural_net.save_weights_biases("/run/media/organi/Work/mnist_weights_bias.json")
+    neural_net = mse_optimizer.train(10,100)
+    neural_net.save_weights_biases("/run/media/organi/Work/weights_bias.json")
     count = 0
     for inputs in range(len(test_data_set.expected_outputs)):
         if not len(test_data_set.inputs[inputs]) == 0:
+            neural_net.load_inputs(test_data_set.inputs[inputs])
             predicted_output = neural_net.predict_output(test_data_set.inputs[inputs])
             print(str(predicted_output))
             print(str(test_data_set.expected_outputs[inputs]))
