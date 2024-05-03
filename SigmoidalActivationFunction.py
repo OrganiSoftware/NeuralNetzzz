@@ -23,3 +23,5 @@ class SigmoidalActivationFuction:
         new_dual_num = one / (one + self.dual_e.dual_pow_dual(negative_dual_num))
         return new_dual_num
 
+    def comp_derivative(self, weighted_sum):
+        return (e ** (weighted_sum * -1))/((1 + e**(weighted_sum * -1))**2)

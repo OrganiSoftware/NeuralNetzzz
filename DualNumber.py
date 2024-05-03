@@ -66,18 +66,14 @@ class DualNumber:
         return new_dual_num
 
     def pow(self, power):
-        new_real = 0
-        new_dual = 0
-        if power > 0:
-            new_real = pow(self.r, power)
-            new_dual = power * pow(self.r, power - 1) * self.d
+        new_dual_num = DualNumber(self.r, self.d)
+        dual_one = DualNumber(1, 0)
+        for inter in range(abs(power)):
+            new_dual_num = new_dual_num * self
+        if power == 0:
+            new_dual_num = dual_one
         elif power < 0:
-            new_real = (pow(self.r, power) / pow(self.r, 2 * abs(power)))
-            new_dual = -((2 * self.r * self.d) / pow(self.r, 2 * abs(power)))
-        else:
-            new_real = 1
-            new_dual = 0
-        new_dual_num = DualNumber(new_real, new_dual)
+            new_dual_num = dual_one / new_dual_num
         return new_dual_num
 
     def nth_root(self, n):

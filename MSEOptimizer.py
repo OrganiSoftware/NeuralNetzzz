@@ -1,3 +1,6 @@
+"""
+@author Antonio Bruce Webb(Organi)
+"""
 from DualNumber import DualNumber
 from DelWeightAndBiasOrganiTensor import DelWeightAndBiasOrganiTensor
 class MSEOptimizer:
@@ -37,7 +40,7 @@ class MSEOptimizer:
                 if not training_state_loaded:
                     self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
                     training_state_loaded = True
-                self.comp_partial(self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[state],
+                self.comp_partial_of_w_of_cost(self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[state],
                                                                               self.training_set.rejected_outputs[state]))
 
                 if (count % batch_sizes) == (batch_sizes - 1):
@@ -51,79 +54,13 @@ class MSEOptimizer:
                     print(str(int((count/total_iterations) * 100) % 100)+"%: "+str(status_string))
         return self.neural_net
 
-    def comp_partial(self, ideal_activations):
-        for layer_index in range(len(self.neural_net.neural_net)):
-            for perceptron_index in range(len(self.neural_net.neural_net[layer_index].neural_layer)):
-                del_weights_dual_list = []
-                del_bias_dual = DualNumber(0, 0)
-                for weight_index in range(len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights) + 1):
-                    initial_dual_layer_activations = []
-                    initial_dual_bias_layer_activations = []
-                    for prop_layer_index in range(len(self.neural_net.neural_net) - layer_index):
-                        dual_layer_activations = []
-                        index = prop_layer_index + layer_index
-                        for prop_perceptron_index in range(len(self.neural_net.neural_net[index].neural_layer)):
-                            if prop_layer_index == 0 and not weight_index == len(
-                                    self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
-                                if prop_perceptron_index == perceptron_index:
-                                    initial_dual_layer_activations.append(
-                                        self.neural_net.neural_net[index].neural_layer[prop_perceptron_index].comp_partial(
-                                            weight_index, False))
-                                else:
-                                    initial_dual_layer_activations.append(
-                                        self.neural_net.neural_net[index].neural_layer[prop_perceptron_index].comp_partial(None,
-                                                                                                                False))
-                            elif weight_index == len(
-                                    self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
-                                if prop_layer_index == 0:
-                                    if prop_perceptron_index == perceptron_index:
-                                        initial_dual_bias_layer_activations.append(
-                                            self.neural_net.neural_net[index].neural_layer[prop_perceptron_index].comp_partial(
-                                                None, True))
-                                    else:
-                                        initial_dual_bias_layer_activations.append(
-                                            self.neural_net.neural_net[index].neural_layer[prop_perceptron_index].comp_partial(
-                                                None, False))
-                                else:
-                                    dual_layer_activations.append(self.neural_net.neural_net[index].neural_layer[
-                                        prop_perceptron_index].comp_partial_given_inputs_dual(
-                                        initial_dual_bias_layer_activations))
-                            else:
-                                dual_layer_activations.append(self.neural_net.neural_net[index].neural_layer[
-                                                                  prop_perceptron_index].comp_partial_given_inputs_dual(
-                                    initial_dual_layer_activations))
-                        if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
-                            if prop_layer_index == 0:
-                                initial_dual_bias_layer_activations = initial_dual_bias_layer_activations
-                            else:
-                                initial_dual_bias_layer_activations = dual_layer_activations
-                        elif prop_layer_index == 0:
-                            initial_dual_layer_activations = initial_dual_layer_activations
-                        else:
-                            initial_dual_layer_activations = dual_layer_activations
-                    dual_partial = DualNumber(0, 0)
-                    if not layer_index == (len(self.neural_net.neural_net) - 1):
-                        for output_index in range(len(ideal_activations)):
-                            if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
-                                dual_expected_activation = DualNumber(ideal_activations[output_index], 0)
-                                dual_partial = dual_partial + (initial_dual_bias_layer_activations[
-                                                               output_index] - dual_expected_activation) ** 2
-                            else:
-                                dual_expected_activation = DualNumber(ideal_activations[output_index], 0)
-                                dual_partial = dual_partial + (
-                                            initial_dual_layer_activations[output_index] - dual_expected_activation) ** 2
-                        if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
-                            del_bias_dual = dual_partial / DualNumber(len(ideal_activations), 0)
-                        else:
-                            del_weights_dual_list.append(dual_partial / DualNumber(len(ideal_activations), 0))
-                    else:
-                        dual_expected_activation = DualNumber(ideal_activations[perceptron_index], 0)
-                        if weight_index == len(self.neural_net.neural_net[layer_index].neural_layer[perceptron_index].weights):
-                            del_bias_dual = initial_dual_bias_layer_activations[perceptron_index]
-                        else:
-                            dual_partial = (initial_dual_layer_activations[
-                                                perceptron_index] - dual_expected_activation) ** 2
-                            del_weights_dual_list.append(dual_partial)
+    def comp_partial_of_w_of_cost(self, ideal_activations):
+        for output_index in range(len(ideal_activations)):
+            del_cost = 2 * (self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_index].activate() - ideal_activations[output_index])
+            for weight_index in range(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_index].weights)):
 
-                self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(layer_index, perceptron_index,
-                                                                                del_weights_dual_list, del_bias_dual)
+            for layer_index in  range(len(self.neural_net.neural_net) - 1):
+                index = (len(self.neural_net.neural_net) - (layer_index + 2))
+                if
+
+                        

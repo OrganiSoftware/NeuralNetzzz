@@ -19,10 +19,7 @@ class Perceptron:
             self.weights.append(random())
 
     def activate(self):
-        weighted_sum = 0
-        for input_index in range(self.num_inputs):
-            weighted_sum += self.inputs[input_index] * self.weights[input_index]
-        weighted_sum += self.bias
+        weighted_sum = self.calc_weighted_sum()
         return self.activation_funct.calculate(weighted_sum)
 
     def input_at_index(self, input_index):
@@ -33,13 +30,20 @@ class Perceptron:
 
     def adjust_weights(self, del_weights):
         for weight_index in range(self.num_inputs):
-            self.weights[weight_index] = self.weights[weight_index] - (self.learning_rate * del_weights.del_weights[weight_index].dual())
+            self.weights[weight_index] = self.weights[weight_index] - (self.learning_rate * del_weights.del_weights[weight_index])
+
+    def calc_weighted_sum(self):
+        weighted_sum = 0
+        for input_index in range(self.num_inputs):
+            weighted_sum += self.inputs[input_index] * self.weights[input_index]
+        weighted_sum += self.bias
+        return weighted_sum
 
     def number_of_inputs(self):
         return self.num_inputs
 
     def adjust_bias(self, del_bias):
-        self.bias = self.bias - (self.learning_rate * del_bias.dual())
+        self.bias = self.bias - (self.learning_rate * del_bias)
 
     def load_inputs(self, inputs):
         self.inputs = inputs
@@ -48,13 +52,17 @@ class Perceptron:
         self.weights = weights
         self.bias = bias
 
-    def comp_partial(self, weight_index, deriving_bias):
+    def comp_partial(self, weight_index, deriving_bias, deriving_x):
         weighted_sum = 0
         dual_weighted_sum = None
         for input_index in range(self.num_inputs):
-            if weight_index == input_index and not deriving_bias and weight_index is not None:
+            if weight_index == input_index and not deriving_bias and weight_index and not deriving_x:
                 weight_dual_num = DualNumber(self.weights[input_index], 1)
                 input_dual_num = DualNumber(self.inputs[input_index], 0)
+                bias_dual_num = DualNumber(self.bias, 0)
+            elif deriving_x and weight_index == input_index:
+                weight_dual_num = DualNumber(self.weights[input_index], 0)
+                input_dual_num = DualNumber(self.inputs[input_index], 1)
                 bias_dual_num = DualNumber(self.bias, 0)
             elif deriving_bias:
                 weight_dual_num = DualNumber(self.weights[input_index], 0)
@@ -83,4 +91,10 @@ class Perceptron:
                 dual_weighted_sum = dual_weighted_sum + ((input_dual_num * weight_dual_num) + DualNumber(self.bias, 0))
             weighted_sum += self.inputs[input_index] * self.weights[input_index] + self.bias
         return self.activation_funct.comp_partial(weighted_sum, dual_weighted_sum)
+
+    def comp_partial_for_mse_cost(self, weight_index, deriving_bias, del_cost):
+        if not deriving_bias:
+            return self.inputs[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
+        else:
+            return 1 * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
 

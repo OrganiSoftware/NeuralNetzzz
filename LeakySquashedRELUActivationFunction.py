@@ -39,3 +39,11 @@ class LeakySquashedRELUActivationFunction:
                 dual_partial = dual_num / self.max_activation_dual
         return dual_partial
 
+    def comp_derivative(self, x):
+        derivative = 0.0
+        if 0 > x > -self.maximum_activation:
+            derivative = self.alpha/self.maximum_activation
+        if 0 < x  < self.maximum_activation:
+            derivative = 1 / self.maximum_activation
+        return derivative
+
