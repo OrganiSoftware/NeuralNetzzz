@@ -98,3 +98,4 @@ class Perceptron:
         else:
             return 1 * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
 
+    def calc_del_c_not_del_activation(self):

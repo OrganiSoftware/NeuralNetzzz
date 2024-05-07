@@ -55,12 +55,30 @@ class MSEOptimizer:
         return self.neural_net
 
     def comp_partial_of_w_of_cost(self, ideal_activations):
+        del_costs = []
+        del_costs_matrix =[[]]
         for output_index in range(len(ideal_activations)):
-            del_cost = 2 * (self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_index].activate() - ideal_activations[output_index])
-            for weight_index in range(len(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_index].weights)):
+            del_costs.append(2 * (self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_index].activate() - ideal_activations[output_index]))
+        for layer_index in  range(len(self.neural_net.neural_net)):
+            index = (len(self.neural_net.neural_net) - (layer_index + 1))
+            temp_del_costs_matrix = [[]]
+            for perceptron_index in range(len(self.neural_net.neural_net[index].neural_layer)):
+                temp_del_costs = []
+                if perceptron_index == 0:
+                    for weight in self.neural_net.neural_net[index].neural_layer[perceptron_index].weights:
+                        temp_del_costs_matrix.append([])
+                del_weights = []
+                del_bias = 0.0
+                if layer_index == 0:
+                    for weight_index in range(len(self.neural_net.neural_net[index].neural_layer[perceptron_index].weights)):
+                        del_weights.append(self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[
+                                               perceptron_index].comp_partial_for_mse_cost(weight_index, False, del_costs[perceptron_index]))
+                        temp_del_costs_matrix[weight_index].append(del_costs[perceptron_index])
+                    del_bias = self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[
+                        perceptron_index].comp_partial_for_mse_cost(None, True, del_costs[perceptron_index])
+                    self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(index,perceptron_index, del_weights,
+                                                                                    del_bias)
+                else:
+                    for weight_index in range(len(self.neural_net.neural_net[index].neural_layer[perceptron_index].weights)):
 
-            for layer_index in  range(len(self.neural_net.neural_net) - 1):
-                index = (len(self.neural_net.neural_net) - (layer_index + 2))
-                if
-
-                        
+            del_costs_matrix = temp_del_costs_matrix
