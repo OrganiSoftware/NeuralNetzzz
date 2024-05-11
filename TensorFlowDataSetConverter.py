@@ -9,8 +9,8 @@ from LeakySquashedRELUActivationFunction import LeakySquashedRELUActivationFunct
 def main():
     train_data_set = DataSet(1,0)
     test_data_set = DataSet(1,0)
-    train_data_set.json_load("/run/media/organi/Work/mnist_train.json", 1)
-    test_data_set.json_load("/run/media/organi/Work/mnist_test.json", 1)
+    train_data_set.json_load("/run/media/organi/Work/mnist_train.json", 54)
+    test_data_set.json_load("/run/media/organi/Work/mnist_test.json", 54)
     sigmoid = SigmoidalActivationFuction()
     relu = LeakySquashedRELUActivationFunction(0, 10)
     output_translation_table = []
