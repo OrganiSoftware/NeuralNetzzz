@@ -35,8 +35,7 @@ class Perceptron:
     def calc_weighted_sum(self):
         weighted_sum = 0
         for input_index in range(self.num_inputs):
-            weighted_sum += self.inputs[input_index] * self.weights[input_index]
-        weighted_sum += self.bias
+            weighted_sum += self.inputs[input_index] * self.weights[input_index] + self.bias
         return weighted_sum
 
     def number_of_inputs(self):

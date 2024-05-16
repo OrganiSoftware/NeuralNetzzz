@@ -38,7 +38,6 @@ class NeuralNetwork:
         predicted_output_value = 0
         predicted_output_index = 0
         for output_index in range(len(output_layer_activations)):
-            print(str(output_layer_activations[output_index]))
             if predicted_output_value < output_layer_activations[output_index]:
                 predicted_output_value = output_layer_activations[output_index]
                 predicted_output_index = output_index

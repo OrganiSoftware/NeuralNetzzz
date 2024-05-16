@@ -9,8 +9,8 @@ from LeakySquashedRELUActivationFunction import LeakySquashedRELUActivationFunct
 def main():
     train_data_set = DataSet(1,0)
     test_data_set = DataSet(1,0)
-    train_data_set.json_load("/run/media/organi/Work/mnist_train.json", 54)
-    test_data_set.json_load("/run/media/organi/Work/mnist_test.json", 54)
+    train_data_set.json_load("/run/media/organi/Work/mnist_train.json", 32)
+    test_data_set.json_load("/run/media/organi/Work/mnist_test.json", 32)
     sigmoid = SigmoidalActivationFuction()
     relu = LeakySquashedRELUActivationFunction(0, 10)
     output_translation_table = []
@@ -26,18 +26,18 @@ def main():
     neural_net.add_hidden_layers(1,16)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(1,100)
+    neural_net = mse_optimizer.train(100,32)
     neural_net.save_weights_biases("/run/media/organi/Work/weights_bias.json")
     count = 0
     for inputs in range(len(test_data_set.expected_outputs)):
         if not len(test_data_set.inputs[inputs]) == 0:
             neural_net.load_inputs(test_data_set.inputs[inputs])
             predicted_output = neural_net.predict_output(test_data_set.inputs[inputs])
-            print(str(predicted_output))
-            print(str(test_data_set.expected_outputs[inputs]))
+            #print(str(predicted_output))
+            #print(str(test_data_set.expected_outputs[inputs]))
             if predicted_output == test_data_set.expected_outputs[inputs]:
                 count += 1
-            print(str((count/(inputs + 1))*100))
+            #rint(str((count/(inputs + 1))*100))
 
 
 def convert(x_train, y_train):
