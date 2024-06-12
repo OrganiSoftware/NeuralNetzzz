@@ -15,8 +15,7 @@ class Perceptron:
         self.weights = []
         self.bias = random()
         for input_index in range(self.num_inputs):
-            self.inputs.append(random())
-            self.weights.append(random())
+            self.weights.append((2 * random()) - 1)
 
     def activate(self):
         weighted_sum = self.calc_weighted_sum()
