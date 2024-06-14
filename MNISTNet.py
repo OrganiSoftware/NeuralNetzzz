@@ -20,7 +20,7 @@ def main():
         if not len(train_data_set.inputs[train_data_state]) < 0:
             num_inputs = len(train_data_set.inputs[train_data_state])
             break
-    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, .1)
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, 1)
     neural_net.add_input_layer(32)
     neural_net.add_hidden_layers(1, 16)
     neural_net.add_hidden_layers(1, 32)
