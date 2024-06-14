@@ -10,23 +10,7 @@ class MSEOptimizer:
         self.neural_net = neural_net
         self.training_set = training_set
         self.del_weight_bias_organi_tensor = None
-    '''
-    def calc_total_cost_of_all_states(self):
-        sum_cost = 0
-        for training_state in range(len(self.training_set)):
-            self.neural_net.load_inputs(self.training_set.inputs[training_state])
-            network_activations = []
-            predicted_outputs = []
-            cost_of_state = 0
-            for neural_layer in range(len(self.neural_net.neural_net)):
-                layer_activations = self.neural_net.neural_net[neural_layer].activations()
-                network_activations.append(layer_activations)
-                predicted_outputs = network_activations[len(network_activations) - 1]
-            for perceptron in range(len(predicted_outputs)):
-                cost_of_state += (predicted_outputs[perceptron] - self.training_set.expected_outputs[perceptron])**2
-            cost_of_state = cost_of_state * (1 / len(predicted_outputs))
-            sum_cost += cost_of_state
-    '''
+
     def train(self, epoch, batch_sizes):
         count = 0
         training_state_loaded = False
@@ -36,32 +20,30 @@ class MSEOptimizer:
         print(str(int((count / total_iterations) * 100) % 100) + "%: " + str(status_string))
         for interation in range(epoch):
             batch = []
+            batch_start_index = int(random() * len(self.training_set.expected_outputs))
+            self.shuffle_training_dataset()
             for training_state in range(batch_sizes):
-                index = int((len(self.training_set.expected_outputs)-1) * random())
-                not_added = True
-                while not_added:
-                    if not self.is_in_batch(index, batch) and len(self.training_set.inputs[index]) > 0:
-                        batch.append(index)
-                        not_added = False
-                    else:
-                        index = int((len(self.training_set.expected_outputs) - 1) * random())
-            for state_index in batch:
-                self.neural_net.load_inputs(self.training_set.inputs[state_index])
-                if not training_state_loaded:
-                    self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
-                    training_state_loaded = True
-                self.comp_partial_of_w_of_cost(
-                    self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[state_index],
-                                                                     self.training_set.rejected_outputs[state_index]))
+                index = (batch_start_index + training_state) % len(self.training_set.expected_outputs)
+                if len(self.training_set.inputs[index]) > 0:
+                    batch.append(index)
+                    self.neural_net.load_inputs(self.training_set.inputs[index])
+                    if not training_state_loaded:
+                        self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
+                        training_state_loaded = True
+                    self.comp_partial_of_w_of_cost(
+                        self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[index],
+                                                                     self.training_set.rejected_outputs[index]))
                 count += 1
                 if int((count / total_iterations) * 100) % 100 > tick_count:
                     for tick in range((int((count / total_iterations) * 100) % 100) - tick_count):
                         status_string += "#"
                     tick_count += (int((count / total_iterations) * 100) % 100) - tick_count
                     print(str(int((count / total_iterations) * 100) % 100) + "%: " + str(status_string))
+            self.del_weight_bias_organi_tensor.average_del_weight_biases()
             self.neural_net.adjust_weights_biases(self.del_weight_bias_organi_tensor)
             self.del_weight_bias_organi_tensor.clear()
         return self.neural_net
+
 
     @staticmethod
     def is_in_batch(index, batch):
@@ -70,6 +52,19 @@ class MSEOptimizer:
             if state_index == index:
                 index_in_batch = True
         return index_in_batch
+
+    def shuffle_training_dataset(self):
+        for training_state_index in range(len(self.training_set.expected_outputs)):
+            index = int((len(self.training_set.expected_outputs) - 1) * random())
+            input_exchanger = self.training_set.inputs[training_state_index]
+            expected_output_exchanger = self.training_set.expected_outputs[training_state_index]
+            rejected_output_exchanger = self.training_set.rejected_outputs[training_state_index]
+            self.training_set.inputs[training_state_index] = self.training_set.inputs[index]
+            self.training_set.expected_outputs[training_state_index] = self.training_set.expected_outputs[index]
+            self.training_set.rejected_outputs[training_state_index] = self.training_set.rejected_outputs[index]
+            self.training_set.inputs[index] = input_exchanger
+            self.training_set.expected_outputs[index] = expected_output_exchanger
+            self.training_set.rejected_outputs[index] = rejected_output_exchanger
 
     def comp_partial_of_w_of_cost(self, ideal_activations):
         del_costs = []
@@ -95,7 +90,7 @@ class MSEOptimizer:
                     del_bias = self.neural_net.neural_net[index].neural_layer[
                                     perceptron_index].comp_partial_for_mse_cost(None, True, del_costs[perceptron_index])
                     self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(index, perceptron_index, del_weights,
-                                                                                        del_bias)
+                                                                                    del_bias)
                 else:
                     for weight_index in range(len(self.neural_net.neural_net[index].neural_layer[perceptron_index].weights)):
                         if weight_index == 0:
@@ -111,3 +106,4 @@ class MSEOptimizer:
                                                                                     del_weights,
                                                                                     del_bias)
             del_costs_matrix = temp_del_costs_matrix
+
