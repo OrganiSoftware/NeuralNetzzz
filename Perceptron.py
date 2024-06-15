@@ -13,7 +13,7 @@ class Perceptron:
         self.learning_rate = learning_rate
         self.inputs = []
         self.weights = []
-        self.bias = random()
+        self.bias = (2 * random()) - 1
         for input_index in range(self.num_inputs):
             self.weights.append((2 * random()) - 1)
 
@@ -95,7 +95,7 @@ class Perceptron:
         if not deriving_bias:
             return self.inputs[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
         else:
-            return 1 * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
+            return self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
 
     def calc_del_c_not_del_activation(self, weight_index, del_cost):
         return self.weights[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost

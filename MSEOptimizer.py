@@ -98,7 +98,8 @@ class MSEOptimizer:
                                             perceptron_index].comp_partial_for_mse_cost(None, True,
                                             del_costs_matrix[perceptron_index]/(len(self.neural_net.neural_net[index + 1].neural_layer)))
                         del_weights.append(self.neural_net.neural_net[index].neural_layer[perceptron_index
-                                                                     ].comp_partial_for_mse_cost(weight_index, False, del_costs_matrix[perceptron_index]/(len(self.neural_net.neural_net[index + 1].neural_layer))))
+                                                                     ].comp_partial_for_mse_cost(weight_index, False, del_costs_matrix[perceptron_index]/
+                                                                                                 (len(self.neural_net.neural_net[index + 1].neural_layer))))
                         temp_del_costs_matrix[weight_index] += self.neural_net.neural_net[index].neural_layer[
                                                   perceptron_index].calc_del_c_not_del_activation(weight_index,
                                                   del_costs_matrix[perceptron_index]/(len(self.neural_net.neural_net[index + 1].neural_layer)))
