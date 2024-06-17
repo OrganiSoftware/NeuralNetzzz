@@ -19,13 +19,11 @@ class MSEOptimizer:
         total_iterations = epoch * batch_sizes
         print(str(int((count / total_iterations) * 100) % 100) + "%: " + str(status_string))
         for interation in range(epoch):
-            batch = []
             batch_start_index = int(random() * len(self.training_set.expected_outputs))
             self.shuffle_training_dataset()
             for training_state in range(batch_sizes):
                 index = (batch_start_index + training_state) % len(self.training_set.expected_outputs)
                 if len(self.training_set.inputs[index]) > 0:
-                    batch.append(index)
                     self.neural_net.load_inputs(self.training_set.inputs[index])
                     if not training_state_loaded:
                         self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
