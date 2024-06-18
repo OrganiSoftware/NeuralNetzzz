@@ -2,7 +2,6 @@
 @author Antonio Bruce Webb(Organi)
 """
 from math import pow
-from numpy import log
 
 
 class DualNumber:

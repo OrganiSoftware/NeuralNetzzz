@@ -19,8 +19,8 @@ class MSEOptimizer:
         total_iterations = epoch * batch_sizes
         print(str(int((count / total_iterations) * 100) % 100) + "%: " + str(status_string))
         for interation in range(epoch):
-            batch_start_index = int(random() * len(self.training_set.expected_outputs))
             self.shuffle_training_dataset()
+            batch_start_index = int(random() * len(self.training_set.expected_outputs))
             for training_state in range(batch_sizes):
                 index = (batch_start_index + training_state) % len(self.training_set.expected_outputs)
                 if len(self.training_set.inputs[index]) > 0:
@@ -28,7 +28,7 @@ class MSEOptimizer:
                     if not training_state_loaded:
                         self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
                         training_state_loaded = True
-                    self.comp_partial_of_w_of_cost(
+                    self.comp_partial_of_w_of_cost(index,
                         self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[index],
                                                                          self.training_set.rejected_outputs[index]))
                 count += 1
@@ -64,7 +64,7 @@ class MSEOptimizer:
             self.training_set.expected_outputs[index] = expected_output_exchanger
             self.training_set.rejected_outputs[index] = rejected_output_exchanger
 
-    def comp_partial_of_w_of_cost(self, ideal_activations):
+    def comp_partial_of_w_of_cost(self, state_index, ideal_activations):
         del_costs = []
         del_costs_matrix = []
         for output_index in range(len(ideal_activations)):
@@ -103,4 +103,5 @@ class MSEOptimizer:
                                                                                     del_weights,
                                                                                     del_bias)
             del_costs_matrix = temp_del_costs_matrix
+
 

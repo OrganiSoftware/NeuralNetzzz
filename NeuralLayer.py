@@ -22,10 +22,10 @@ class NeuralLayer:
         return self.neural_layer[perceptron_index]
 
     def num_perceptrons(self):
-        return self.num_perceptrons()
+        return self.num_perceptrons
 
     def load_inputs(self, inputs):
-        for perceptron_index in range(self.num_perceptrons):
+        for perceptron_index in range(len(self.neural_layer)):
             self.neural_layer[perceptron_index].load_inputs(inputs)
 
     #def load_weights(self):
