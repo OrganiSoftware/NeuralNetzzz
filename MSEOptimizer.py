@@ -5,6 +5,7 @@ from DualNumber import DualNumber
 from DelWeightAndBiasOrganiTensor import DelWeightAndBiasOrganiTensor
 from random import random
 from threading import Thread
+import resource
 
 class MSEOptimizer:
 
@@ -14,6 +15,18 @@ class MSEOptimizer:
         self.del_weight_bias_organi_tensor = None
 
     def train(self, epoch, batch_sizes, threads):
+        resc = resource.RLIMIT_CPU
+        soft,hard = resource.getrlimit(resc)
+        resource.setrlimit(resc,(soft, resource.RLIM_INFINITY))
+        resc = resource.RLIMIT_MEMLOCK
+        soft, hard = resource.getrlimit(resc)
+        resource.setrlimit(resc, (soft, resource.RLIM_INFINITY))
+        resc = resource.RLIMIT_CORE
+        soft, hard = resource.getrlimit(resc)
+        resource.setrlimit(resc, (soft, resource.RLIM_INFINITY))
+        resc = resource.RUSAGE_THREAD
+        soft, hard = resource.getrlimit(resc)
+        resource.setrlimit(resc, (soft, resource.RLIM_INFINITY))
         count = 0
         training_state_loaded = False
         status_string = ""
@@ -24,7 +37,6 @@ class MSEOptimizer:
             self.shuffle_training_dataset()
             batch_start_index = int(random() * len(self.training_set.expected_outputs))
             batch_count = 0
-            thread_count = 0
             thread_array = []
             threads_started = False
             are_threads_running = False
@@ -63,7 +75,7 @@ class MSEOptimizer:
                             if thread_array[thread_index].is_alive():
                                 are_threads_running = True
                         if not are_threads_running:
-                            batch_count += len(threads_2_gen)
+                            batch_count += len(thread_array)
                             thread_array = []
                             threads_started = False
                 if int((count / total_iterations) * 100) % 100 > tick_count:
@@ -139,5 +151,6 @@ class MSEOptimizer:
                                                                                     del_weights,
                                                                                     del_bias)
             del_costs_matrix = temp_del_costs_matrix
+
 
 
