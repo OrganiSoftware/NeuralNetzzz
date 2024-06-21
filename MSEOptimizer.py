@@ -4,6 +4,8 @@
 from DualNumber import DualNumber
 from DelWeightAndBiasOrganiTensor import DelWeightAndBiasOrganiTensor
 from random import random
+from threading import Thread
+
 class MSEOptimizer:
 
     def __init__(self, neural_net, training_set):
@@ -11,7 +13,7 @@ class MSEOptimizer:
         self.training_set = training_set
         self.del_weight_bias_organi_tensor = None
 
-    def train(self, epoch, batch_sizes):
+    def train(self, epoch, batch_sizes, threads):
         count = 0
         training_state_loaded = False
         status_string = ""
@@ -21,17 +23,53 @@ class MSEOptimizer:
         for interation in range(epoch):
             self.shuffle_training_dataset()
             batch_start_index = int(random() * len(self.training_set.expected_outputs))
+            batch_count = 0
+            thread_count = 0
+            thread_array = []
+            threads_started = False
+            are_threads_running = False
+            threads_2_gen = threads
+            while (batch_count < batch_sizes or are_threads_running):
+                are_threads_running = False
+                index = (batch_start_index + count) % len(self.training_set.expected_outputs)
+                if batch_sizes - batch_count < threads:
+                    threads_2_gen = batch_sizes - batch_count
+                if thread_count < threads_2_gen and len(self.training_set.inputs[index]) > 0:
+                    if not training_state_loaded:
+                        self.neural_net.load_inputs(self.training_set.inputs[index])
+                        self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
+                        training_state_loaded = True
+                    t = Thread(target=self.comp_partial_of_w_of_cost, args=(index,
+                                                                            self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[index],
+                                                                            self.training_set.rejected_outputs[index])),  daemon=True)
+                    thread_array.append(t)
+                    thread_count += 1
+                    count += 1
+                else:
+                    if not threads_started:
+                        for thread in thread_array:
+                            thread.start()
+                        threads_started = True
+                    else:
+                        for thread_index in range(len(thread_array)):
+                            print(thread_array[thread_index].is_alive())
+                            if thread_array[thread_index].is_alive():
+                                are_threads_running = True
+                        if not are_threads_running:
+                            batch_count += threads_2_gen
+                            thread_count = 0
+                            thread_array = []
+                            are_threads_running = False
+                            threads_started = False
+
             for training_state in range(batch_sizes):
                 index = (batch_start_index + training_state) % len(self.training_set.expected_outputs)
                 if len(self.training_set.inputs[index]) > 0:
-                    self.neural_net.load_inputs(self.training_set.inputs[index])
-                    if not training_state_loaded:
-                        self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
-                        training_state_loaded = True
+
                     self.comp_partial_of_w_of_cost(index,
                         self.neural_net.ideal_activations_for_prediction(self.training_set.expected_outputs[index],
                                                                          self.training_set.rejected_outputs[index]))
-                count += 1
+
                 if int((count / total_iterations) * 100) % 100 > tick_count:
                     for tick in range((int((count / total_iterations) * 100) % 100) - tick_count):
                         status_string += "#"
@@ -67,6 +105,7 @@ class MSEOptimizer:
     def comp_partial_of_w_of_cost(self, state_index, ideal_activations):
         del_costs = []
         del_costs_matrix = []
+        self.neural_net.load_inputs(self.training_set.inputs[state_index])
         for output_index in range(len(ideal_activations)):
             del_costs.append(2 * (self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_index].activate() - ideal_activations[output_index]))
             print(del_costs[output_index])
