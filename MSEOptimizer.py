@@ -59,7 +59,7 @@ class MSEOptimizer:
                                                                                     self.training_set.expected_outputs[
                                                                                         index],
                                                                                     self.training_set.rejected_outputs[
-                                                                                        index])), daemon=True)
+                                                                                        index]), self.neural_net))
                         thread_array.append(t)
                         count += 1
                 if not threads_started:
@@ -88,16 +88,6 @@ class MSEOptimizer:
             self.del_weight_bias_organi_tensor.clear()
         return self.neural_net
 
-
-
-    @staticmethod
-    def is_in_batch(index, batch):
-        index_in_batch = False
-        for state_index in batch:
-            if state_index == index:
-                index_in_batch = True
-        return index_in_batch
-
     def shuffle_training_dataset(self):
         for training_state_index in range(len(self.training_set.expected_outputs)):
             index = int((len(self.training_set.expected_outputs) - 1) * random())
@@ -111,40 +101,40 @@ class MSEOptimizer:
             self.training_set.expected_outputs[index] = expected_output_exchanger
             self.training_set.rejected_outputs[index] = rejected_output_exchanger
 
-    def comp_partial_of_w_of_cost(self, state_index, ideal_activations):
+    def comp_partial_of_w_of_cost(self, state_index, ideal_activations, neural_net):
         del_costs = []
         del_costs_matrix = []
-        self.neural_net.load_inputs(self.training_set.inputs[state_index])
+        neural_net.load_inputs(self.training_set.inputs[state_index])
         for output_index in range(len(ideal_activations)):
-            del_costs.append(2 * (self.neural_net.neural_net[len(self.neural_net.neural_net) - 1].neural_layer[output_index].activate() - ideal_activations[output_index]))
+            del_costs.append(2 * (neural_net.neural_net[len(neural_net.neural_net) - 1].neural_layer[output_index].activate() - ideal_activations[output_index]))
             print(del_costs[output_index])
-        for layer_index in range(len(self.neural_net.neural_net)):
-            index = (len(self.neural_net.neural_net) - (layer_index + 1))
+        for layer_index in range(len(neural_net.neural_net)):
+            index = (len(neural_net.neural_net) - (layer_index + 1))
             temp_del_costs_matrix = []
-            for weight_index in range(len(self.neural_net.neural_net[index].neural_layer[0].weights)):
+            for weight_index in range(len(neural_net.neural_net[index].neural_layer[0].weights)):
                 temp_del_costs_matrix.append(0.0)
-            for perceptron_index in range(len(self.neural_net.neural_net[index].neural_layer)):
+            for perceptron_index in range(len(neural_net.neural_net[index].neural_layer)):
                 del_weights = []
                 del_bias = 0.0
                 if layer_index == 0:
-                    for weight_index in range(len(self.neural_net.neural_net[index].neural_layer[perceptron_index].weights)):
-                        del_weights.append(self.neural_net.neural_net[index].neural_layer[
+                    for weight_index in range(len(neural_net.neural_net[index].neural_layer[perceptron_index].weights)):
+                        del_weights.append(neural_net.neural_net[index].neural_layer[
                                                perceptron_index].comp_partial_for_mse_cost(weight_index, False, del_costs[perceptron_index]))
-                        temp_del_costs_matrix[weight_index] += self.neural_net.neural_net[index].neural_layer[
+                        temp_del_costs_matrix[weight_index] += neural_net.neural_net[index].neural_layer[
                                                                 perceptron_index].calc_del_c_not_del_activation(weight_index, del_costs[perceptron_index])
-                    del_bias = self.neural_net.neural_net[index].neural_layer[
+                    del_bias = neural_net.neural_net[index].neural_layer[
                                     perceptron_index].comp_partial_for_mse_cost(None, True, del_costs[perceptron_index])
                     self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(index, perceptron_index, del_weights,
                                                                                     del_bias)
                 else:
-                    for weight_index in range(len(self.neural_net.neural_net[index].neural_layer[perceptron_index].weights)):
+                    for weight_index in range(len(neural_net.neural_net[index].neural_layer[perceptron_index].weights)):
                         if weight_index == 0:
-                            del_bias += self.neural_net.neural_net[index].neural_layer[
+                            del_bias += neural_net.neural_net[index].neural_layer[
                                             perceptron_index].comp_partial_for_mse_cost(None, True,
                                             del_costs_matrix[perceptron_index])
-                        del_weights.append(self.neural_net.neural_net[index].neural_layer[perceptron_index
+                        del_weights.append(neural_net.neural_net[index].neural_layer[perceptron_index
                                                                      ].comp_partial_for_mse_cost(weight_index, False, del_costs_matrix[perceptron_index]))
-                        temp_del_costs_matrix[weight_index] += self.neural_net.neural_net[index].neural_layer[
+                        temp_del_costs_matrix[weight_index] += neural_net.neural_net[index].neural_layer[
                                                   perceptron_index].calc_del_c_not_del_activation(weight_index,
                                                   del_costs_matrix[perceptron_index])
                     self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(index, perceptron_index,
