@@ -4,6 +4,7 @@ from MSEOptimizer import MSEOptimizer
 from SigmoidalActivationFunction import SigmoidalActivationFuction
 from LeakySquashedRELUActivationFunction import LeakySquashedRELUActivationFunction
 
+
 def main():
     train_data_set = DataSet(1,0)
     test_data_set = DataSet(1,0)
@@ -19,13 +20,13 @@ def main():
         if len(train_data_set.inputs[train_data_state]) > 0:
             num_inputs = len(train_data_set.inputs[train_data_state])
             break
-    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, 1)
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, .1)
     neural_net.add_input_layer(100)
     neural_net.add_hidden_layers(1, 100)
     neural_net.add_hidden_layers(1, 100)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(100,64, 64)
+    neural_net = mse_optimizer.train(100,128, 128)
     neural_net.save_weights_biases("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/weights_bias.json")
     count = 0
     for inputs in range(len(test_data_set.expected_outputs)):

@@ -31,12 +31,12 @@ class MSEOptimizer:
         training_state_loaded = False
         status_string = ""
         tick_count = 0
-        total_iterations = epoch * batch_sizes
-        print(str(int((count / total_iterations) * 100) % 100) + "%: " + str(status_string))
-        for interation in range(epoch):
+        print(str(int((0 / epoch) * 100) % 100) + "%: " + str(status_string))
+        for iteration in range(epoch):
             self.shuffle_training_dataset()
             batch_start_index = int(random() * len(self.training_set.expected_outputs))
             batch_count = 0
+            thread_count = 0
             thread_array = []
             threads_started = False
             are_threads_running = False
@@ -48,7 +48,7 @@ class MSEOptimizer:
                 if ((batch_sizes - batch_count) < threads_2_gen):
                     threads_2_gen = batch_sizes - batch_count
                 for thread_index in range(threads_2_gen):
-                    index = (batch_start_index + count) % len(self.training_set.expected_outputs)
+                    index = (batch_start_index + thread_count) % len(self.training_set.expected_outputs)
                     if len(self.training_set.inputs[index]) > 0:
                         if not training_state_loaded:
                             self.neural_net.load_inputs(self.training_set.inputs[index])
@@ -61,7 +61,8 @@ class MSEOptimizer:
                                                                                     self.training_set.rejected_outputs[
                                                                                         index]), self.neural_net))
                         thread_array.append(t)
-                        count += 1
+                    thread_count += 1
+                    count += 1
                 if not threads_started:
                     for thread in thread_array:
                         thread.start()
@@ -77,12 +78,13 @@ class MSEOptimizer:
                         if not are_threads_running:
                             batch_count += len(thread_array)
                             thread_array = []
+                            thread_count = 0
                             threads_started = False
-                if int((count / total_iterations) * 100) % 100 > tick_count:
-                    for tick in range((int((count / total_iterations) * 100) % 100) - tick_count):
-                        status_string += "#"
-                    tick_count += (int((count / total_iterations) * 100) % 100) - tick_count
-                    print(str(int((count / total_iterations) * 100) % 100) + "%: " + str(status_string))
+            if int((iteration / epoch) * 100) % 100 > tick_count:
+                for tick in range((int((iteration / epoch) * 100) % 100) - tick_count):
+                    status_string += "#"
+                tick_count = (int((iteration / epoch) * 100) % 100)
+                print(str(int((iteration / epoch) * 100) % 100) + "%: " + str(status_string))
             self.del_weight_bias_organi_tensor.average_del_weight_biases()
             self.neural_net.adjust_weights_biases(self.del_weight_bias_organi_tensor)
             self.del_weight_bias_organi_tensor.clear()
@@ -131,12 +133,14 @@ class MSEOptimizer:
                         if weight_index == 0:
                             del_bias += neural_net.neural_net[index].neural_layer[
                                             perceptron_index].comp_partial_for_mse_cost(None, True,
-                                            del_costs_matrix[perceptron_index])
+                                            del_costs_matrix[perceptron_index]/len(self.neural_net.neural_net[index + 1].neural_layer))
                         del_weights.append(neural_net.neural_net[index].neural_layer[perceptron_index
-                                                                     ].comp_partial_for_mse_cost(weight_index, False, del_costs_matrix[perceptron_index]))
+                                                                     ].comp_partial_for_mse_cost(weight_index, False, del_costs_matrix[perceptron_index]/
+                                                                                                 len(self.neural_net.neural_net[index + 1].neural_layer)))
                         temp_del_costs_matrix[weight_index] += neural_net.neural_net[index].neural_layer[
                                                   perceptron_index].calc_del_c_not_del_activation(weight_index,
-                                                  del_costs_matrix[perceptron_index])
+                                                  del_costs_matrix[perceptron_index]/
+                                                  len(self.neural_net.neural_net[index + 1].neural_layer))
                     self.del_weight_bias_organi_tensor.add_del_weight_and_bias_calc(index, perceptron_index,
                                                                                     del_weights,
                                                                                     del_bias)
