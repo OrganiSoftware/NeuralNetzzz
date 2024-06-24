@@ -50,12 +50,11 @@ class MSEOptimizer:
                 for thread_index in range(threads_2_gen):
                     index = (batch_start_index + thread_count) % len(self.training_set.expected_outputs)
                     if len(self.training_set.inputs[index]) > 0:
+                        self.neural_net.load_inputs(self.training_set.inputs[index])
                         if not training_state_loaded:
-                            self.neural_net.load_inputs(self.training_set.inputs[index])
                             self.del_weight_bias_organi_tensor = DelWeightAndBiasOrganiTensor(self.neural_net)
                             training_state_loaded = True
-                        t = Thread(target=self.comp_partial_of_w_of_cost, args=(index,
-                                                                                self.neural_net.ideal_activations_for_prediction(
+                        t = Thread(target=self.comp_partial_of_w_of_cost, args=(self.neural_net.ideal_activations_for_prediction(
                                                                                     self.training_set.expected_outputs[
                                                                                         index],
                                                                                     self.training_set.rejected_outputs[
@@ -103,12 +102,12 @@ class MSEOptimizer:
             self.training_set.expected_outputs[index] = expected_output_exchanger
             self.training_set.rejected_outputs[index] = rejected_output_exchanger
 
-    def comp_partial_of_w_of_cost(self, state_index, ideal_activations, neural_net):
+    def comp_partial_of_w_of_cost(self,ideal_activations, neural_net):
         del_costs = []
         del_costs_matrix = []
-        neural_net.load_inputs(self.training_set.inputs[state_index])
         for output_index in range(len(ideal_activations)):
-            del_costs.append(2 * (neural_net.neural_net[len(neural_net.neural_net) - 1].neural_layer[output_index].activate() - ideal_activations[output_index]))
+            del_costs.append(2 * (neural_net.neural_net[len(neural_net.neural_net) - 1
+                                  ].neural_layer[output_index].activate() - ideal_activations[output_index]))
             print(del_costs[output_index])
         for layer_index in range(len(neural_net.neural_net)):
             index = (len(neural_net.neural_net) - (layer_index + 1))
