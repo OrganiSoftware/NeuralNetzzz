@@ -18,8 +18,8 @@ class DataSet:
 
     def add_state(self, inputs, expected_output, rejected_outputs):
         normalized_input_state = []
-        for input in range(len(inputs)):
-            normalized_value = inputs[input]/(self.max_value - self.min_value)
+        for input_index in range(len(inputs)):
+            normalized_value = inputs[input_index] / (self.max_value - self.min_value)
             if normalized_value < self.normalized_min:
                 self.normalized_min = normalized_value
             if normalized_value > self.normalized_max:
@@ -51,19 +51,17 @@ class DataSet:
                 inputs = input_state['inputs']
                 average = 0
                 count = 0
-                for input in range(len(inputs)):
-                    if input % (size_of_subset) == 0 and not input == 0:
+                for input_index in range(len(inputs)):
+                    if (input_index % (size_of_subset) == 0 and not input_index == 0) or size_of_subset == 1:
                         if not count == 0:
                             subset.append(average/count)
                         else:
-                            subset.append(inputs[input])
+                            subset.append(inputs[input_index])
                         count = 0
                         average = 0
                     else:
-                        average += inputs[input]
+                        average += inputs[input_index]
                         count += 1
-                if not average == 0:
-                    subset.append(average/count)
                 expected_output = input_state["expected_output"]
                 rejected_outputs = input_state["rejected_outputs"]
                 self.max_value = input_state['max']
@@ -89,3 +87,4 @@ class DataSet:
     def clear(self,):
         self.inputs = [[]]
         self.expected_outputs = []
+        self.rejected_outputs = [[]]

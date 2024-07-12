@@ -7,9 +7,10 @@ from DualNumber import DualNumber
 
 class Perceptron:
 
-    def __init__(self, activation_funct, num_inputs, learning_rate):
+    def __init__(self, activation_funct, num_inputs, learning_rate, hyperparam):
         self.activation_funct = activation_funct
         self.num_inputs = num_inputs
+        self.hyperparam = hyperparam
         self.weights_loaded = False
         self.learning_rate = learning_rate
         self.inputs = []
@@ -99,7 +100,8 @@ class Perceptron:
 
     def comp_partial_for_mse_cost(self, weight_index, deriving_bias, del_cost):
         if not deriving_bias:
-            return self.inputs[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
+            return ((self.inputs[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost)
+                    + self.hyperparam * self.weights[weight_index])
         else:
             return self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
 

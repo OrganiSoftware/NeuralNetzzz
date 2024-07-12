@@ -7,9 +7,10 @@ import json
 
 
 class NeuralNetwork:
-    def __init__(self, output_translation_table, size_of_input_layer, activation_function, learning_rate):
+    def __init__(self, output_translation_table, size_of_input_layer, activation_function, learning_rate, hyperparam):
         self.neural_net = []
         self.size_of_output_layer = len(output_translation_table)
+        self.hyperparam = hyperparam
         self.output_translation_table = output_translation_table
         self.size_of_input_layer = size_of_input_layer
         self.activation_function = activation_function
@@ -17,14 +18,15 @@ class NeuralNetwork:
         self.constructed = False
 
     def add_input_layer(self, num_perceptrons):
-        layer = NeuralLayer(self.size_of_input_layer, num_perceptrons, self.activation_function, self.learning_rate)
+        layer = NeuralLayer(self.size_of_input_layer, num_perceptrons, self.activation_function, self.learning_rate,
+                            self.hyperparam)
         self.neural_net.append(layer)
 
     def add_hidden_layers(self, num_layers, size_of_layers):
         if not self.constructed:
             for layer_index in range(num_layers):
                 num_inputs = len(self.neural_net[len(self.neural_net) - 1].neural_layer)
-                layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate)
+                layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate, self.hyperparam)
                 self.neural_net.append(layer)
 
     def is_constructed(self):
