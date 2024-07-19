@@ -11,11 +11,14 @@ class Perceptron:
         self.activation_funct = activation_funct
         self.num_inputs = num_inputs
         self.hyperparam = hyperparam
-        self.weights_loaded = False
         self.learning_rate = learning_rate
         self.inputs = []
         self.weights = []
         self.bias = (2 * random()) - 1
+        for input_index in range(num_inputs):
+            self.weights.append((2 * random()) - 1)
+        self.weights_loaded = True
+
 
     def activate(self):
         weighted_sum = self.calc_weighted_sum()
@@ -46,17 +49,10 @@ class Perceptron:
 
     def load_inputs(self, inputs):
         self.inputs = inputs
-        if not self.weights_loaded:
-            self.initialize_weights()
 
     def load_weights_bias(self, weights, bias):
         self.weights = weights
         self.bias = bias
-
-    def initialize_weights(self):
-        for input_index in range(len(self.inputs)):
-            self.weights.append((2 * random()) - 1)
-        self.weights_loaded = True
 
     def comp_partial(self, weight_index, deriving_bias, deriving_x):
         weighted_sum = 0
