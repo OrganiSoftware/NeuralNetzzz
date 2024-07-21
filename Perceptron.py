@@ -96,10 +96,10 @@ class Perceptron:
 
     def comp_partial_for_mse_cost(self, weight_index, deriving_bias, del_cost):
         if not deriving_bias:
-            return ((self.inputs[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost)
+            return ((self.inputs[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum(), del_cost) * del_cost)
                     + self.hyperparam * self.weights[weight_index])
         else:
-            return self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
+            return self.activation_funct.comp_derivative(self.calc_weighted_sum(), del_cost) * del_cost
 
     def calc_del_c_not_del_activation(self, weight_index, del_cost):
-        return self.weights[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum()) * del_cost
+        return self.weights[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum(), del_cost) * del_cost

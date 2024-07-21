@@ -22,5 +22,5 @@ class HyperbolicTangentActivationFunction:
 
         return partial
 
-    def comp_derivative(self, weighted_sum):
+    def comp_derivative(self, weighted_sum, del_cost):
         return 1 - ((self.calculate(weighted_sum))**2)

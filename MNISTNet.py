@@ -3,15 +3,22 @@ from NeuralNetwork import NeuralNetwork
 from MSEOptimizer import MSEOptimizer
 from SigmoidalActivationFunction import SigmoidalActivationFuction
 from LeakySquashedRELUActivationFunction import LeakySquashedRELUActivationFunction
+#import tensorflow as tf
+#import TensorFlowDataSetConverter as converter
 
 
 def main():
+    #(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+    #train_data_set = converter.convert(x_train, y_train, None)
+    #test_data_set = converter.convert(x_test, y_test, None)
     train_data_set = DataSet(1,0)
     test_data_set = DataSet(1,0)
     train_data_set.json_load("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_train.json", 1)
     test_data_set.json_load("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_test.json", 1)
+    #train_data_set.store_in_json("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_train.json")
+    #test_data_set.store_in_json("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_test.json")
     sigmoid = SigmoidalActivationFuction()
-    relu = LeakySquashedRELUActivationFunction(0, 25)
+    relu = LeakySquashedRELUActivationFunction(0, 10, -10)
     output_translation_table = []
     for index in range(10):
         output_translation_table.append(index)
@@ -20,7 +27,7 @@ def main():
         if len(train_data_set.inputs[train_data_state]) > 0:
             num_inputs = len(train_data_set.inputs[train_data_state])
             break
-    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, .1,  0)
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, relu, .5,  0)
     neural_net.add_input_layer(32)
     neural_net.add_hidden_layers(1, 32)
     neural_net.add_hidden_layers(1, 32)

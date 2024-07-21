@@ -4,15 +4,16 @@
 from DataSet import DataSet
 
 
-def convert(x_train, y_train):
+def convert(x, y, rejected_outputs):
     data_set = DataSet(255, 0)
-    for image in range(len(x_train)):
-        expected_output = int(y_train[image])
+    for image in range(len(x)):
+        expected_output = int(y[image])
         inputs = []
-        for row in range(len(x_train[image])):
-            for column in range(len(x_train[image][row])):
-                inputs.append(float(x_train[image][row][column]))
-        data_set.add_state(inputs, expected_output, None)
+        for row in range(len(x[image])):
+            for column in range(len(x[image][row])):
+                inputs.append(float(x[image][row][column]))
+        data_set.add_state(inputs, expected_output, rejected_outputs)
     return data_set
+
 
 

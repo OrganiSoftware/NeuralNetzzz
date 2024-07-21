@@ -36,8 +36,8 @@ class DataSet:
                 array.append({"inputs": self.inputs[input_state_index],
                               "expected_output": self.expected_outputs[input_state_index],
                               "rejected_outputs": self.rejected_outputs[input_state_index],
-                              "num_inputs": len(self.inputs),
-                              "num_states": len(self.inputs[input_state_index]),
+                              "num_inputs":len(self.inputs[input_state_index]),
+                              "num_states": len(self.inputs),
                               "max": self.normalized_max,
                               "min": self.normalized_min})
             jsonWriter.write(json.dumps({"DataSet": array}))
