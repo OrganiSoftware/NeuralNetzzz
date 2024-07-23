@@ -16,7 +16,7 @@ class LeakySquashedRELUActivationFunction:
         self.minimum_activation_dual = DualNumber(minimum_activation, 0)
 
     def calculate(self, x):
-        if x <= 0:
+        if x < 0:
             if x * self.alpha < self.minimum_activation:
                 resultant = -1
             else:
@@ -44,8 +44,8 @@ class LeakySquashedRELUActivationFunction:
     '''
     def comp_derivative(self, x, del_cost):
         derivative = 0.0
-        if (0 >= x * self.alpha > self.minimum_activation) or (x * self.alpha <= self.minimum_activation and del_cost < 0):
-            if self.alpha == 0 and del_cost < 0:
+        if (0 >= x > self.minimum_activation) or (x * self.alpha <= self.minimum_activation and del_cost < 0):
+            if (self.alpha == 0 and del_cost < 0) or (x == 0 and del_cost < 0):
                 derivative = 1 / self.maximum_activation
             else:
                 derivative = self.alpha/self.minimum_activation
