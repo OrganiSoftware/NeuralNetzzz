@@ -19,7 +19,6 @@ class Perceptron:
             self.weights.append((2 * random()) - 1)
         self.weights_loaded = True
 
-
     def activate(self):
         weighted_sum = self.calc_weighted_sum()
         return self.activation_funct.calculate(weighted_sum)
