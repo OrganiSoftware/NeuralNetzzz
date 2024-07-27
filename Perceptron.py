@@ -45,8 +45,6 @@ class Perceptron:
         self.stored_weighted_sum = weighted_sum
         return weighted_sum
 
-    #def derive_weighted_sum(self, activation):
-
     def number_of_inputs(self):
         return self.num_inputs
 
