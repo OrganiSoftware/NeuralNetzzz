@@ -2,19 +2,23 @@
 @author Antonio Bruce Webb(Organi)
 """
 from random import random
+
+from pfp.fields import false
+
 from DualNumber import DualNumber
 
 
 class Perceptron:
 
-    def __init__(self, activation_funct, num_inputs, learning_rate, hyperparam):
+    def __init__(self, activation_funct, num_inputs, learning_rate, hyperparam, activation_function_type):
         self.activation_funct = activation_funct
         self.num_inputs = num_inputs
         self.hyperparam = hyperparam
         self.learning_rate = learning_rate
         self.inputs = []
         self.weights = []
-        self.bias = (2 * random()) - 1
+        self.bias = 2 * random() - 1
+        self.stored_weighted_sum = 0
         for input_index in range(num_inputs):
             self.weights.append((2 * random()) - 1)
         self.weights_loaded = True
@@ -38,7 +42,10 @@ class Perceptron:
         for input_index in range(self.num_inputs):
             weighted_sum += self.inputs[input_index] * self.weights[input_index]
         weighted_sum += self.bias
+        self.stored_weighted_sum = weighted_sum
         return weighted_sum
+
+    #def derive_weighted_sum(self, activation):
 
     def number_of_inputs(self):
         return self.num_inputs
@@ -95,10 +102,11 @@ class Perceptron:
 
     def comp_partial_for_mse_cost(self, weight_index, deriving_bias, del_cost):
         if not deriving_bias:
-            return ((self.inputs[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum(), del_cost) * del_cost)
+            return ((self.inputs[weight_index] * self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost)
                     + self.hyperparam * self.weights[weight_index])
         else:
-            return self.activation_funct.comp_derivative(self.calc_weighted_sum(), del_cost) * del_cost
+            return self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost
 
     def calc_del_c_not_del_activation(self, weight_index, del_cost):
-        return self.weights[weight_index] * self.activation_funct.comp_derivative(self.calc_weighted_sum(), del_cost) * del_cost
+        return self.weights[weight_index] * self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost
+

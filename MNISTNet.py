@@ -3,6 +3,7 @@ from NeuralNetwork import NeuralNetwork
 from MSEOptimizer import MSEOptimizer
 from SigmoidalActivationFunction import SigmoidalActivationFuction
 from LeakySquashedRELUActivationFunction import LeakySquashedRELUActivationFunction
+from HyperbolicTangentActivationFunction import HyperbolicTangentActivationFunction
 #import tensorflow as tf
 #import TensorFlowMNISTDataSetConverter as converter
 
@@ -18,7 +19,8 @@ def main():
     #train_data_set.store_in_json("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_train.json")
     #test_data_set.store_in_json("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_test.json")
     sigmoid = SigmoidalActivationFuction()
-    relu = LeakySquashedRELUActivationFunction(.25, 10, -10)
+    relu = LeakySquashedRELUActivationFunction(0, 15, 0)
+    hyperbolic_tangent = HyperbolicTangentActivationFunction()
     output_translation_table = []
     for index in range(10):
         output_translation_table.append(index)
@@ -27,12 +29,12 @@ def main():
         if len(train_data_set.inputs[train_data_state]) > 0:
             num_inputs = len(train_data_set.inputs[train_data_state])
             break
-    neural_net = NeuralNetwork(output_translation_table, num_inputs, relu, 1,  0)
-    neural_net.add_input_layer(10)
-    neural_net.add_hidden_layers(2, 10)
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, .002,  0, "leakyrelu")
+    neural_net.add_input_layer(32)
+    neural_net.add_hidden_layers(2, 32)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(200,128, 32)
+    neural_net = mse_optimizer.train(10000,32, 32)
     neural_net.save_weights_biases("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/weights_bias.json")
     count = 0
     for inputs in range(len(test_data_set.expected_outputs)):
