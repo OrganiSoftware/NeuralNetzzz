@@ -3,7 +3,6 @@
 """
 from random import random
 
-from DualNumber import DualNumber
 
 
 class Perceptron:
@@ -55,46 +54,6 @@ class Perceptron:
     def load_weights_bias(self, weights, bias):
         self.weights = weights
         self.bias = bias
-
-    def comp_partial(self, weight_index, deriving_bias, deriving_x):
-        weighted_sum = 0
-        dual_weighted_sum = None
-        for input_index in range(self.num_inputs):
-            if weight_index == input_index and not deriving_bias and weight_index and not deriving_x:
-                weight_dual_num = DualNumber(self.weights[input_index], 1)
-                input_dual_num = DualNumber(self.inputs[input_index], 0)
-                bias_dual_num = DualNumber(self.bias, 0)
-            elif deriving_x and weight_index == input_index:
-                weight_dual_num = DualNumber(self.weights[input_index], 0)
-                input_dual_num = DualNumber(self.inputs[input_index], 1)
-                bias_dual_num = DualNumber(self.bias, 0)
-            elif deriving_bias:
-                weight_dual_num = DualNumber(self.weights[input_index], 0)
-                input_dual_num = DualNumber(self.inputs[input_index], 0)
-                bias_dual_num = DualNumber(self.bias, 1)
-            else:
-                weight_dual_num = DualNumber(self.weights[input_index], 0)
-                input_dual_num = DualNumber(self.inputs[input_index], 0)
-                bias_dual_num = DualNumber(self.bias, 0)
-            if dual_weighted_sum is None:
-                dual_weighted_sum = (input_dual_num * weight_dual_num) + bias_dual_num
-            else:
-                dual_weighted_sum = dual_weighted_sum + ((input_dual_num * weight_dual_num) + bias_dual_num)
-            weighted_sum += self.inputs[input_index] * self.weights[input_index] + self.bias
-        return self.activation_funct.comp_partial(weighted_sum, dual_weighted_sum)
-
-    def comp_partial_given_inputs_dual(self, dual_inputs):
-        weighted_sum = 0
-        dual_weighted_sum = None
-        for input_index in range(len(dual_inputs)):
-            weight_dual_num = DualNumber(self.weights[input_index], 0)
-            input_dual_num = dual_inputs[input_index]
-            if dual_weighted_sum is None:
-                dual_weighted_sum = (input_dual_num * weight_dual_num) + DualNumber(self.bias, 0)
-            else:
-                dual_weighted_sum = dual_weighted_sum + ((input_dual_num * weight_dual_num) + DualNumber(self.bias, 0))
-            weighted_sum += self.inputs[input_index] * self.weights[input_index] + self.bias
-        return self.activation_funct.comp_partial(weighted_sum, dual_weighted_sum)
 
     def comp_partial_for_mse_cost(self, weight_index, deriving_bias, del_cost):
         if not deriving_bias:

@@ -43,7 +43,7 @@ class DelWeightAndBiasOrganiTensor:
         return self.del_weight_and_bias_network[layer_index]
 
     """
-    retrieves a multi-dimensional array of  
+    retrieves a multi-dimensional array of del weights for the entire network.
     """
     def del_weights(self):
         weights_list = []
@@ -51,12 +51,18 @@ class DelWeightAndBiasOrganiTensor:
             weights_list.append(self.del_weight_and_bias_network[layer_index].del_weights())
         return weights_list
 
+    """
+    retrieves a multi-dimensional array of del biases for the entire network.
+    """
     def del_biases(self):
         del_biases = []
         for layer_index in range(len(self.del_weight_and_bias_network)):
             del_biases.append(self.del_weight_and_bias_network[layer_index].del_biases())
         return del_biases
 
+    """
+    clears all del weights and del biases for the entire tensor.
+    """
     def clear(self):
         for layer_index in range(len(self.del_weight_and_bias_network)):
             self.del_weight_and_bias_network[layer_index].clear()

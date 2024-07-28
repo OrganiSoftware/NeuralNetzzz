@@ -2,7 +2,6 @@
 @authonr Antonio B.Webb(Organi)
 dataset class: data structure for the training and testing data also stores all the training and testing data.
 """
-
 import json
 
 

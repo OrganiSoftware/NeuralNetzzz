@@ -2,7 +2,6 @@
 @author Antonio Bruce Webb(Organi)
 """
 from NeuralLayer import NeuralLayer
-from DualNumber import DualNumber
 import json
 
 
