@@ -91,7 +91,7 @@ class MSEOptimizer:
         '''
 
 
-    def train(self, epoch, batch_sizes, threads):
+    def train(self, epoch, batch_sizes):
         count = 0
         training_state_loaded = False
         status_string = ""

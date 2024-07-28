@@ -34,7 +34,7 @@ def main():
     neural_net.add_hidden_layers(2, 64)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(10000,32, 32)
+    neural_net = mse_optimizer.train(10000,32)
     neural_net.save_weights_biases("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/weights_bias.json")
     count = 0
     for inputs in range(len(test_data_set.expected_outputs)):

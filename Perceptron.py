@@ -3,8 +3,6 @@
 """
 from random import random
 
-from pfp.fields import false
-
 from DualNumber import DualNumber
 
 
@@ -35,7 +33,7 @@ class Perceptron:
 
     def adjust_weights(self, del_weights):
         for weight_index in range(self.num_inputs):
-            self.weights[weight_index] = self.weights[weight_index] - (self.learning_rate * del_weights.del_weights[weight_index])
+            self.weights[weight_index] = self.weights[weight_index] - (self.learning_rate * del_weights[weight_index])
 
     def calc_weighted_sum(self):
         weighted_sum = 0

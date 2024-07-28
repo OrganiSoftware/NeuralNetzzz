@@ -1,7 +1,6 @@
 """
 @author Antonio Bruce Webb(Organi)
 """
-from sympy.abc import alpha
 
 from DualNumber import DualNumber
 
