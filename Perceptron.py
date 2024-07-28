@@ -14,7 +14,7 @@ class Perceptron:
         self.learning_rate = learning_rate
         self.inputs = []
         self.weights = []
-        self.bias = 2 * random() - 1
+        self.bias = (2 * random()) - 1
         self.stored_weighted_sum = 0
         for input_index in range(num_inputs):
             self.weights.append((2 * random()) - 1)
