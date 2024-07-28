@@ -5,11 +5,11 @@ from Perceptron import Perceptron
 
 
 class NeuralLayer:
-    def __init__(self, num_inputs, num_perceptrons, activation_funct, learning_rate, hyperparam, activation_function_type):
+    def __init__(self, num_inputs, num_perceptrons, activation_funct, learning_rate, hyperparam):
         self.neural_layer = []
         self.num_perceptrons = num_perceptrons
         for perceptron_index in range(self.num_perceptrons):
-            perceptron = Perceptron(activation_funct, num_inputs, learning_rate, hyperparam,activation_function_type)
+            perceptron = Perceptron(activation_funct, num_inputs, learning_rate, hyperparam)
             self.neural_layer.append(perceptron)
 
     def activations(self):

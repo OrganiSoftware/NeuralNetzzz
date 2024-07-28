@@ -10,7 +10,7 @@ from DualNumber import DualNumber
 
 class Perceptron:
 
-    def __init__(self, activation_funct, num_inputs, learning_rate, hyperparam, activation_function_type):
+    def __init__(self, activation_funct, num_inputs, learning_rate, hyperparam):
         self.activation_funct = activation_funct
         self.num_inputs = num_inputs
         self.hyperparam = hyperparam

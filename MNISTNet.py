@@ -29,7 +29,7 @@ def main():
         if len(train_data_set.inputs[train_data_state]) > 0:
             num_inputs = len(train_data_set.inputs[train_data_state])
             break
-    neural_net = NeuralNetwork(output_translation_table, num_inputs, relu, .02,  0, "leakyrelu")
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, sigmoid, .1,  0)
     neural_net.add_input_layer(64)
     neural_net.add_hidden_layers(2, 64)
     neural_net.is_constructed()
