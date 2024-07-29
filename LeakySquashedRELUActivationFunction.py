@@ -3,13 +3,26 @@
 """
 
 
+"""
+class LeakySquashedRELUActivationFunction: activation function class.
+"""
 class LeakySquashedRELUActivationFunction:
 
+    """
+    constructor for LeakySquashedRELUActivationFunction.
+    alpha: the leaky part of the activation function this is the slope when x < 0.
+    maximum_activation: max activation of the relu.
+    minimum_activation: min activation of the relu.
+    """
     def __init__(self, alpha, maximum_activation, minimum_activation):
         self.alpha = alpha
         self.maximum_activation = maximum_activation
         self.minimum_activation = minimum_activation
 
+    """
+    activation function.
+    x: the x value the is to be passed into the activation function.
+    """
     def calculate(self, x):
         if x < 0:
             if x * self.alpha < self.minimum_activation:
@@ -29,6 +42,11 @@ class LeakySquashedRELUActivationFunction:
                 resultant = x / self.maximum_activation
         return resultant
 
+    """
+    retrieves the derivative of the activation function.
+    x: the value for x being passed into the activation function.
+    del_cost: the del cost of the cost function.
+    """
     def comp_derivative(self, x, del_cost):
         derivative = 0.0
         if (0 >= x > self.minimum_activation) or (x * self.alpha <= self.minimum_activation and del_cost < 0) or (x < 0 and self.alpha < 0):

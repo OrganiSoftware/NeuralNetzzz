@@ -4,13 +4,26 @@
 from DelWeightAndBiasOrganiTensor import DelWeightAndBiasOrganiTensor
 from random import random
 
+"""
+class MSEOptimizer: optimizer for training the neural network.
+"""
 class MSEOptimizer:
 
+    """
+    constructor for MSEOptimizer.
+    neural_net: neuralnetwork component that is to be trained.
+    training_set: the dataset component that is to be used for training.
+    """
     def __init__(self, neural_net, training_set):
         self.neural_net = neural_net
         self.training_set = training_set
         self.del_weight_bias_organi_tensor = None
 
+    """
+    the training algorithm for the neuralnetwork using mini batch gradient descent.
+    epoch: number of epoches
+    batch_sizes: size of the batches.
+    """
     def train(self, epoch, batch_sizes):
         count = 0
         training_state_loaded = False
@@ -41,6 +54,9 @@ class MSEOptimizer:
             self.del_weight_bias_organi_tensor.clear()
         return self.neural_net
 
+    """
+    shuffles the training set randomly
+    """
     def shuffle_training_dataset(self):
         for training_state_index in range(len(self.training_set.expected_outputs)):
             index = int((len(self.training_set.expected_outputs) - 1) * random())
@@ -54,6 +70,10 @@ class MSEOptimizer:
             self.training_set.expected_outputs[index] = expected_output_exchanger
             self.training_set.rejected_outputs[index] = rejected_output_exchanger
 
+    """
+    calculates the del costs and del biases for a training state in the optimization.
+    ideal_activations: the expected output of the neuralnetwork.
+    """
     def comp_partial_of_w_of_cost(self,ideal_activations):
         del_costs = []
         del_costs_matrix = []

@@ -1,10 +1,12 @@
 """
 @author Antonio Bruce Webb(Organi)
-Class DelWeightAndBiasLayerObj: layer component for DelWeightAndBiasOrganiTensor.
 """
 from DelWeightAndBiasObj import DelWeightAndBiasObj
 
 
+"""
+Class DelWeightAndBiasLayerObj: layer component for DelWeightAndBiasOrganiTensor.
+"""
 class DelWeightAndBiasLayerObj:
 
     """

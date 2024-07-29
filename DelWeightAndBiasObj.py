@@ -1,9 +1,11 @@
 """
 @author Antonio Bruce Webb(Organi)
-class DelWeightAndBiasObj: del weight and bias component for the DelWeightAndBiasOrganiTensor
 """
 
 
+"""
+class DelWeightAndBiasObj: del weight and bias component for the DelWeightAndBiasOrganiTensor
+"""
 class DelWeightAndBiasObj:
 
     """

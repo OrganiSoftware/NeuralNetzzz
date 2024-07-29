@@ -1,11 +1,13 @@
 """
 @author Antonio Bruce Webb(Organi)
-Class DelWeightAndBiasOrganiTensor: rank 3 tensor with non-conformal magnitudes for a given array in a dimension.
-stores the del weights and del biases providing a one to one mapping to the weights in the neuralnetwork.
 """
 from DelWeightAndBiasLayerObj import DelWeightAndBiasLayerObj
 
 
+"""
+Class DelWeightAndBiasOrganiTensor: rank 3 tensor with non-conformal magnitudes for a given array in a dimension.
+stores the del weights and del biases providing a one to one mapping to the weights in the neuralnetwork.
+"""
 class DelWeightAndBiasOrganiTensor:
 
     """
