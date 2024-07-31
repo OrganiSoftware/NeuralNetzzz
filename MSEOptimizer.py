@@ -78,7 +78,7 @@ class MSEOptimizer:
         del_costs = []
         del_costs_matrix = []
         for output_index in range(len(ideal_activations)):
-            del_costs.append(2 * (self.neural_net.neural_net[len(self.neural_net.neural_net) - 1
+            del_costs.append((self.neural_net.neural_net[len(self.neural_net.neural_net) - 1
                               ].neural_layer[output_index].activate() - ideal_activations[output_index]))
             print(del_costs[output_index])
         for layer_index in range(len(self.neural_net.neural_net)):
