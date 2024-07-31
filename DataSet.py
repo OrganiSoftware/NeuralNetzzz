@@ -1,5 +1,5 @@
 """
-@authonr Antonio B.Webb(Organi)
+@author Antonio B.Webb(Organi)
 """
 import json
 
