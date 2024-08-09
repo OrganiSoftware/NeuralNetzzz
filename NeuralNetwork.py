@@ -18,7 +18,7 @@ class NeuralNetwork:
     learning_rate: learning rate of the perceptrons.
     hyperparam: hyperparam for the network pushes it closer to zero or further away.
     """
-    def __init__(self, output_translation_table, size_of_input_layer, activation_function, learning_rate, hyperparam):
+    def __init__(self, output_translation_table, size_of_input_layer, activation_function, learning_rate, hyperparam, rational_num):
         self.neural_net = []
         self.size_of_output_layer = len(output_translation_table)
         self.hyperparam = hyperparam
@@ -27,6 +27,8 @@ class NeuralNetwork:
         self.activation_function = activation_function
         self.learning_rate = learning_rate
         self.constructed = False
+        self.rational_num = rational_num
+        self.rationalizer = self.rational_num * self.size_of_input_layer
 
     """
     adds an input layer to the neuralnetwork.
@@ -34,7 +36,7 @@ class NeuralNetwork:
     """
     def add_input_layer(self, num_perceptrons):
         layer = NeuralLayer(self.size_of_input_layer, num_perceptrons, self.activation_function, self.learning_rate,
-                            self.hyperparam)
+                            self.hyperparam, self.rationalizer)
         self.neural_net.append(layer)
 
 
@@ -44,18 +46,23 @@ class NeuralNetwork:
     size_of_layers: size of the hidden layers to be added.
     """
     def add_hidden_layers(self, num_layers, size_of_layers):
-        if not self.constructed:
-            for layer_index in range(num_layers):
-                num_inputs = len(self.neural_net[len(self.neural_net) - 1].neural_layer)
-                layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate, self.hyperparam)
-                self.neural_net.append(layer)
+        for layer_index in range(num_layers):
+            num_inputs = len(self.neural_net[len(self.neural_net) - 1].neural_layer)
+            if self.constructed:
+                layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate,
+                                        self.hyperparam, self.size_of_output_layer)
+            else:
+                layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate,
+                                        self.hyperparam, self.rationalizer)
+            self.neural_net.append(layer)
     """
     checks if neuralnetwork is constructed and adds an output layer if it is not. 
     """
     def is_constructed(self):
         if not self.constructed:
-            self.add_hidden_layers(1, self.size_of_output_layer)
             self.constructed = True
+            self.add_hidden_layers(1, self.size_of_output_layer)
+
 
     """
     predicts an output based on a given input set.

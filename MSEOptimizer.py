@@ -36,6 +36,8 @@ class MSEOptimizer:
             batch_start_index = int(random() * len(self.training_set.expected_outputs))
             for training_state_index in range(batch_sizes):
                 index = (batch_start_index + training_state_index) % len(self.training_set.expected_outputs)
+                print(index)
+                self.neural_net.load_inputs(self.training_set.inputs[index])
                 if len(self.training_set.inputs[index]) > 0:
                     self.neural_net.load_inputs(self.training_set.inputs[index])
                     if not training_state_loaded:

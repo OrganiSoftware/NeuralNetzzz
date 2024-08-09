@@ -16,7 +16,7 @@ class Perceptron:
     learning_rate: learning rate.
     hyperparam: hyperparam for the network pushes it closer to zero or further away.
     """
-    def __init__(self, activation_funct, num_inputs, learning_rate, hyperparam):
+    def __init__(self, activation_funct, num_inputs, learning_rate, hyperparam, rational_num):
         self.activation_funct = activation_funct
         self.num_inputs = num_inputs
         self.hyperparam = hyperparam
@@ -25,8 +25,10 @@ class Perceptron:
         self.weights = []
         self.bias = (2 * random()) - 1
         self.stored_weighted_sum = 0
+        self.rational_num = rational_num
         for input_index in range(num_inputs):
             self.weights.append((2 * random()) - 1)
+            self.inputs.append(0)
         self.weights_loaded = True
 
     """
@@ -34,7 +36,7 @@ class Perceptron:
     """
     def activate(self):
         weighted_sum = self.calc_weighted_sum()
-        return self.activation_funct.calculate(weighted_sum)
+        return self.activation_funct.calculate(weighted_sum) * self.rational_num
 
     """
     retrieves the input value at a given index.
@@ -97,6 +99,7 @@ class Perceptron:
     def load_weights_bias(self, weights, bias):
         self.weights = weights
         self.bias = bias
+
     """
     calculates the partial of the mse cost function with respect to the weight and bias.
     weight_index: index of the weight to calc partial of.
@@ -105,10 +108,10 @@ class Perceptron:
     """
     def comp_partial_for_mse_cost(self, weight_index, deriving_bias, del_cost):
         if not deriving_bias:
-            return ((self.inputs[weight_index] * self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost)
+            return ((self.inputs[weight_index] * self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost * self.rational_num)
                     + self.hyperparam * self.weights[weight_index])
         else:
-            return self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost
+            return self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost * self.rational_num
 
     """
     calculates the partial of the mse cost function with respect to the activation for hidden layers.
@@ -116,5 +119,5 @@ class Perceptron:
     del_cost: del of cost function with respect to the activation of the layer l+1.
     """
     def calc_del_c_not_del_activation(self, weight_index, del_cost):
-        return self.weights[weight_index] * self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost
+        return self.weights[weight_index] * self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost * self.rational_num
 

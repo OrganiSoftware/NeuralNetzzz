@@ -91,7 +91,6 @@ class DataSet:
                 self.max_value = input_state['max']
                 self.min_value = input_state['min']
                 self.add_state(subset,expected_output,rejected_outputs)
-
             jsonReader.close()
 
     """
@@ -119,10 +118,14 @@ class DataSet:
         self.delete_state(input_index)
         self.add_state(new_inputs, new_expected, new_rejected)
 
+    def rationalize(self, rational_num):
+        for state_index in range(len(self.inputs)):
+            for input_index in range(len(self.inputs[state_index])):
+                self.inputs[state_index][input_index] *= rational_num
     """
     clears dataset.
     """
-    def clear(self,):
+    def clear(self):
         self.inputs = [[]]
         self.expected_outputs = []
         self.rejected_outputs = [[]]

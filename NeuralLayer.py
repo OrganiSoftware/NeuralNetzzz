@@ -16,12 +16,15 @@ class NeuralLayer:
     learning_rate: learning rate of the perceptrons.
     hyperparam: hyperparam for the network pushes it closer to zero or further away.
     """
-    def __init__(self, num_inputs, num_perceptrons, activation_funct, learning_rate, hyperparam):
+    def __init__(self, num_inputs, num_perceptrons, activation_funct, learning_rate, hyperparam, rationalizer):
         self.neural_layer = []
         self.num_perceptrons = num_perceptrons
+        self.rationalizer = rationalizer
+        self.rational_num = self.rationalizer/self.num_perceptrons
         for perceptron_index in range(self.num_perceptrons):
-            perceptron = Perceptron(activation_funct, num_inputs, learning_rate, hyperparam)
+            perceptron = Perceptron(activation_funct, num_inputs, learning_rate, hyperparam, self.rational_num)
             self.neural_layer.append(perceptron)
+
 
     """
     retrieves an array of the activations for the layer.
