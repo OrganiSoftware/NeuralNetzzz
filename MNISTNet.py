@@ -4,26 +4,26 @@ from MSEOptimizer import MSEOptimizer
 from SigmoidalActivationFunction import SigmoidalActivationFuction
 from LeakySquashedRELUActivationFunction import LeakySquashedRELUActivationFunction
 from HyperbolicTangentActivationFunction import HyperbolicTangentActivationFunction
-import tensorflow as tf
-import TensorFlowMNISTDataSetConverter as converter
+#import tensorflow as tf
+#import TensorFlowMNISTDataSetConverter as converter
 
 
 def main():
-    (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-    assert x_train.shape == (60000, 28, 28)
-    assert x_test.shape == (10000, 28, 28)
-    assert y_train.shape == (60000,)
-    assert y_test.shape == (10000,)
-    train_data_set = converter.convert(x_train, y_train, None)
-    test_data_set = converter.convert(x_test, y_test, None)
-    #train_data_set = DataSet(1,0)
-    #test_data_set = DataSet(1,0)
-    #train_data_set.json_load("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_train.json", 1)
-    #test_data_set.json_load("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_test.json", 1)
-    train_data_set.store_in_json("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_train.json")
-    test_data_set.store_in_json("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_test.json")
+    #(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+    #assert x_train.shape == (60000, 28, 28)
+    #assert x_test.shape == (10000, 28, 28)
+    #assert y_train.shape == (60000,)
+    #assert y_test.shape == (10000,)
+    #train_data_set = converter.convert(x_train, y_train, None)
+    #test_data_set = converter.convert(x_test, y_test, None)
+    train_data_set = DataSet(1,0)
+    test_data_set = DataSet(1,0)
+    train_data_set.json_load("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_train.json", 1)
+    test_data_set.json_load("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_test.json", 1)
+    #train_data_set.store_in_json("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_train.json")
+    #test_data_set.store_in_json("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/mnist_test.json")
     sigmoid = SigmoidalActivationFuction()
-    relu = LeakySquashedRELUActivationFunction(0, 5, 0)
+    relu = LeakySquashedRELUActivationFunction(0, 1, 0)
     hyperbolic_tangent = HyperbolicTangentActivationFunction()
     output_translation_table = []
     for index in range(10):
@@ -33,9 +33,9 @@ def main():
         if len(train_data_set.inputs[train_data_state]) > 0:
             num_inputs = len(train_data_set.inputs[train_data_state])
             break
-    train_data_set.rationalize(.013)
-    test_data_set.rationalize(.013)
-    neural_net = NeuralNetwork(output_translation_table, num_inputs, relu, .002,0, .013)
+    train_data_set.rationalize(255)
+    test_data_set.rationalize(255)
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, relu, 1,0, 0)
     neural_net.add_input_layer(10)
     neural_net.add_hidden_layers(2, 10)
     neural_net.is_constructed()

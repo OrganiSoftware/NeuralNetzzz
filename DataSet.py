@@ -122,6 +122,7 @@ class DataSet:
         for state_index in range(len(self.inputs)):
             for input_index in range(len(self.inputs[state_index])):
                 self.inputs[state_index][input_index] *= rational_num
+
     """
     clears dataset.
     """

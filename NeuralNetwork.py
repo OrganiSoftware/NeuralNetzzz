@@ -55,6 +55,7 @@ class NeuralNetwork:
                 layer = NeuralLayer(num_inputs, size_of_layers, self.activation_function, self.learning_rate,
                                         self.hyperparam, self.rationalizer)
             self.neural_net.append(layer)
+
     """
     checks if neuralnetwork is constructed and adds an output layer if it is not. 
     """
@@ -62,7 +63,6 @@ class NeuralNetwork:
         if not self.constructed:
             self.constructed = True
             self.add_hidden_layers(1, self.size_of_output_layer)
-
 
     """
     predicts an output based on a given input set.
