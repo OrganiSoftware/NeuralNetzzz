@@ -1,5 +1,5 @@
 """
-@author Antonio Bruce Webb(Organi)
+@author Antonio Bruce Webb(Savant)
 """
 from DelWeightAndBiasObj import DelWeightAndBiasObj
 

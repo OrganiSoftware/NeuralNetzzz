@@ -1,5 +1,5 @@
 """
-@author Antonio Bruce Webb(Organi)
+@author Antonio Bruce Webb(Savant)
 """
 from NeuralLayer import NeuralLayer
 import json
@@ -38,7 +38,6 @@ class NeuralNetwork:
         layer = NeuralLayer(self.size_of_input_layer, num_perceptrons, self.activation_function, self.learning_rate,
                             self.hyperparam, self.rationalizer)
         self.neural_net.append(layer)
-
 
     """
     adds hidden layers to the neuralnetwork.

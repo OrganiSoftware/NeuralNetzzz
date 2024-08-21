@@ -1,5 +1,5 @@
 """
-@author Antonio B.Webb(Organi)
+@author Antonio B.Webb(Savant)
 """
 import json
 
@@ -15,7 +15,7 @@ class DataSet:
     min_value min value in the dataset
     """
     def __init__(self, max_value, min_value):
-        self.inputs = [[]]
+        self.inputs =[[]]
         self.expected_outputs = []
         self.rejected_outputs = [[]]
         self.max_value = max_value

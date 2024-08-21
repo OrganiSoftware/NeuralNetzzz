@@ -1,3 +1,7 @@
+"""
+@author Antonio Bruce Webb(Savant)
+"""
+
 from DataSet import DataSet
 from NeuralNetwork import NeuralNetwork
 from MSEOptimizer import MSEOptimizer
@@ -40,7 +44,7 @@ def main():
     neural_net.add_hidden_layers(2, 10)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(10000,128)
+    neural_net = mse_optimizer.train(100,128)
     neural_net.save_weights_biases("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/weights_bias.json")
     count = 0
     for inputs in range(len(test_data_set.expected_outputs)):
