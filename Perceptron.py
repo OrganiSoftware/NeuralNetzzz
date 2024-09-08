@@ -89,7 +89,8 @@ class Perceptron:
     inputs: set of inputs to load in.
     """
     def load_inputs(self, inputs):
-        self.inputs = inputs
+        for input_index in range(len(inputs)):
+            self.inputs[input_index] = inputs[input_index]
 
     """
     loads in given weights and bias.
@@ -120,4 +121,9 @@ class Perceptron:
     """
     def calc_del_c_not_del_activation(self, weight_index, del_cost):
         return self.weights[weight_index] * self.activation_funct.comp_derivative(self.stored_weighted_sum, del_cost) * del_cost
-
+    """
+    sets input array to zero.
+    """
+    def clear_inputs(self):
+        for i in range(len(self.inputs)):
+            self.inputs[i] = 0

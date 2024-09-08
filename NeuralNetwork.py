@@ -174,7 +174,10 @@ class NeuralNetwork:
                 self.neural_net[layer_index].adjust_weights_biases(del_weight_bias_network.del_weight_and_bias_network[layer_index])
 
 
-
+    def clear_inputs(self):
+        for layer_index in range(len(self.neural_net)):
+            for perceptron in self.neural_net[layer_index].neural_layer:
+                perceptron.clear_inputs()
 
 
 

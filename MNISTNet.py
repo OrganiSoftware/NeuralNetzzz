@@ -39,12 +39,12 @@ def main():
             break
     train_data_set.rationalize(255)
     test_data_set.rationalize(255)
-    neural_net = NeuralNetwork(output_translation_table, num_inputs, relu, 1,0, 0)
+    neural_net = NeuralNetwork(output_translation_table, num_inputs, relu, .002,0, 0)
     neural_net.add_input_layer(10)
     neural_net.add_hidden_layers(2, 10)
     neural_net.is_constructed()
     mse_optimizer = MSEOptimizer(neural_net, train_data_set)
-    neural_net = mse_optimizer.train(100,128)
+    neural_net = mse_optimizer.train(1000,128)
     neural_net.save_weights_biases("/run/media/jackal/Work/SoftwareProjects/NeuralNetzzz/weights_bias.json")
     count = 0
     for inputs in range(len(test_data_set.expected_outputs)):
